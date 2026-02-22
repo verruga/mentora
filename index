@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>Title</title>
+        <!-- Required meta tags -->
+        <meta charset="utf-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+        />
+
+        <!-- Bootstrap CSS v5.2.1 -->
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+            crossorigin="anonymous"
+        />
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+        <style>
+            body {
+                font-family: 'Poppins';
+            }
+
+            .navbar-brand {
+                color: white;
+            }
+
+            .nav-link {
+                color: white
+            }
+
+            .carousel-control-prev-icon, 
+            .carousel-control-next-icon {
+                filter: invert(1);
+            }
+
+            .carousel-control-prev {
+                left: -40px;
+            }
+
+            .carousel-control-next {
+                right: -40px;
+            }
+            .carousel-item img {
+                height: 400px;
+                object-fit: cover;
+            }
+
+            .marquee-wrapper {
+                overflow: hidden;
+            }
+
+            .marquee-content {
+                display: flex;
+                flex-wrap: nowrap;
+                gap: 20px;
+                width: max-content;
+                animation: slideLeft 20s linear infinite;
+            }
+
+            .marquee-wrapper:hover .marquee-content {
+                animation-play-state: paused;
+            }
+
+            .custom-card {
+                width: 250px;
+                flex: 0 0 auto;
+            }
+
+            @keyframes slideLeft {
+                from { transform: translateX(0); }
+                to { transform: translateX(-50%); }
+            }
+            
+        </style>
+    </head>
+
+    <body>
+        <header>
+            <nav class="navbar navbar-expand-sm" style="background-color: #133c55;">
+                <div class="container-fluid">
+                    <a class="navbar-brand fw-bold fs-3 " href="#">
+                        Mentora
+                    </a>
+
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="mynavbar">
+                        <ul class="navbar-nav me-auto" >
+                            <li class="nav-item">
+                                <a href="javascript:void(0)" class="nav-link">Link</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="javascript:void(0)" class="nav-link">Link</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="javascript:void(0)" class="nav-link">Link</a>
+                            </li>
+                        </ul>
+                        <form class="d-flex">
+                            <input type="text" class="form-control me-2" placeholder="Search">
+                            <button class="btn btn-primary" type="button">Masuk/Daftar</button>
+                        </form>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <section id="hero" class="p-0">
+            <video src="videos/lock.mp4" width="100%" autoplay loop muted></video>
+        </section>
+
+        <section id="events" class="py-5">
+            <div class="container-fluid">
+                <h1 class="h1 text-center">Events</h1>
+                <div class="row justify-content-center">
+                    <div class="col-sm-3 mb-2">
+                        <div class="card">
+                            <img src="images/1.png" alt="." class="card-img-top">
+                            <div class="card-body">
+                                <h5 class="class-title">Card title</h5>
+                                <p class="class-text">Lorem Ipsum</p>
+                                <a href="javascript:void(0)" class="btn btn-info">Details</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-3 mb-2">
+                        <div class="card">
+                            <img src="images/1.png" alt="." class="card-img-top">
+                            <div class="card-body">
+                                <h5 class="class-title">Card title</h5>
+                                <p class="class-text">Lorem Ipsum</p>
+                                <a href="javascript:void(0)" class="btn btn-info">Details</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-3 mb-2">
+                        <div class="card">
+                            <img src="images/1.png" alt="." class="card-img-top">
+                            <div class="card-body">
+                                <h5 class="class-title">Card title</h5>
+                                <p class="class-text">Lorem Ipsum</p>
+                                <a href="javascript:void(0)" class="btn btn-info">Details</a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                
+            </div>
+        </section>
+
+        <section id="our-events" class="py-5 bg-light">
+            <div class="container">
+                <marquee behavior="" direction="">
+                    <h1 class="h1">Our Events</h1>
+                </marquee>
+                
+                <div id="heroCar" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+
+                        <!-- item satu -->
+                         <div class="carousel-item active">
+                            <div class="card border-0 rounded-4">
+                                <div class="row g-0 align-items-center">
+
+                                    <div class="col-md-6">
+                                        <img src="images/1.png" alt="" class="img-fluid rounded-start w-100" style="height: 400px; object-fit: cover;">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="card-body p-5">
+                                            <h2 class="fw-bold">Test</h2>
+                                            <p class="text-muted">
+                                                blablablbolblblalblablblbalbaablablabdkbbadjkabljibdji
+                                            </p>
+                                            <a href="javascript:void(0)" class="btn btn-primary">Lihat Detail</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                         </div>
+
+                        <!-- item dua -->
+                         <div class="carousel-item">
+                            <div class="card border-0 rounded-4">
+                                <div class="row g-0 align-items-center">
+
+                                    <div class="col-md-6">
+                                        <img src="images/2.png" alt="" class="img-fluid rounded-start w-100" style="height: 400px; object-fit: cover;">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="card-body p-5">
+                                            <h2 class="fw-bold">Test Lagi</h2>
+                                            <p class="text-muted" style="max-width: 400px;">juanckokjuanckokjuanckokjuanckokjuanckokjuanckokjuanckokjuanckokjuanckokjuanckokjuanckokjuanckokjuanckok</p>
+                                            <a href="javascript:void(0)" class="btn btn-primary">Lihat Detail</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                         </div>
+                    </div>
+
+                    <button class="carousel-control-prev" type="button" data-bs-target="#heroCar" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon"></span>
+                    </button>
+
+                    <button class="carousel-control-next" type="button" data-bs-target="#heroCar" data-bs-slide="next">
+                        <span class="carousel-control-next-icon"></span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-5">
+            <div class="container">
+                <h1 class="fw-bold text-center mb-5">Kata mereka tentang Mentora</h1>
+                <div class="marquee-wrapper">
+                    <div class="marquee-content mb-5">
+                        
+                        <div class="card custom-card">
+                            <div class="card-body">
+                                <div class="card-title"><h5 class="fw-bold">Andy Permana</h5></div>
+                                <div class="card-text"><p>fwhekbbhfwefhqefqe ciqb fc wkf bqwfcqcqwbfcqfbcnwfqwundfiqwnfqwubfqwifbqwiu</p></div>
+                            </div>
+                        </div>
+
+                        <div class="card custom-card">
+                            <div class="card-body">
+                                <div class="card-title"><h5 class="fw-bold">Joshua Yovany</h5></div>
+                                <div class="card-text"><p>fwhekbbhfwefhqefqe ciqb fc wkf bqwfcqcqwbfcqfbcnwfqwundfiqwnfqwubfqwifbqwiu</p></div>
+                            </div>
+                        </div>
+
+                        <div class="card custom-card">
+                            <div class="card-body">
+                                <div class="card-title"><h5 class="fw-bold">Jap Cong Ho</h5></div>
+                                <div class="card-text"><p>fwhekbbhfwefhqefqe ciqb fc wkf bqwfcqcqwbfcqfbcnwfqwundfiqwnfqwubfqwifbqwiu</p></div>
+                            </div>
+                        </div>
+
+                        <div class="card custom-card">
+                            <div class="card-body">
+                                <div class="card-title"><h5 class="fw-bold">Akun Bodong</h5></div>
+                                <div class="card-text"><p>aplikasi scam ciqb fc wkf bqwfcqcqwbfcqfbcnwfqwundfiqwnfqwubfqwifbqwiu</p></div>
+                            </div>
+                        </div>
+
+                        <div class="card custom-card">
+                            <div class="card-body">
+                                <div class="card-title"><h5 class="fw-bold">Tukang Ragebait</h5></div>
+                                <div class="card-text"><p>Bumi itu datar</p></div>
+                            </div>
+                        </div>
+
+                        <!-- duplikatnya biar loopnya smooth -->
+
+                        <div class="card custom-card">
+                            <div class="card-body">
+                                <div class="card-title"><h5 class="fw-bold">Andy Permana</h5></div>
+                                <div class="card-text"><p>fwhekbbhfwefhqefqe ciqb fc wkf bqwfcqcqwbfcqfbcnwfqwundfiqwnfqwubfqwifbqwiu</p></div>
+                            </div>
+                        </div>
+
+                        <div class="card custom-card">
+                            <div class="card-body">
+                                <div class="card-title"><h5 class="fw-bold">Joshua Yovany</h5></div>
+                                <div class="card-text"><p>fwhekbbhfwefhqefqe ciqb fc wkf bqwfcqcqwbfcqfbcnwfqwundfiqwnfqwubfqwifbqwiu</p></div>
+                            </div>
+                        </div>
+
+                        <div class="card custom-card">
+                            <div class="card-body">
+                                <div class="card-title"><h5 class="fw-bold">Jap Cong Ho</h5></div>
+                                <div class="card-text"><p>fwhekbbhfwefhqefqe ciqb fc wkf bqwfcqcqwbfcqfbcnwfqwundfiqwnfqwubfqwifbqwiu</p></div>
+                            </div>
+                        </div>
+
+                        <div class="card custom-card">
+                            <div class="card-body">
+                                <div class="card-title"><h5 class="fw-bold">Akun Bodong</h5></div>
+                                <div class="card-text"><p>aplikasi scam ciqb fc wkf bqwfcqcqwbfcqfbcnwfqwundfiqwnfqwubfqwifbqwiu</p></div>
+                            </div>
+                        </div>
+
+                        <div class="card custom-card">
+                            <div class="card-body">
+                                <div class="card-title"><h5 class="fw-bold">Tukang Ragebait</h5></div>
+                                <div class="card-text"><p>Bumi itu datar</p></div>
+                            </div>
+                        </div>
+
+                        <!-- duplikatnya biar loopnya smooth -->
+
+                        <div class="card custom-card">
+                            <div class="card-body">
+                                <div class="card-title"><h5 class="fw-bold">Andy Permana</h5></div>
+                                <div class="card-text"><p>fwhekbbhfwefhqefqe ciqb fc wkf bqwfcqcqwbfcqfbcnwfqwundfiqwnfqwubfqwifbqwiu</p></div>
+                            </div>
+                        </div>
+
+                        <div class="card custom-card">
+                            <div class="card-body">
+                                <div class="card-title"><h5 class="fw-bold">Joshua Yovany</h5></div>
+                                <div class="card-text"><p>fwhekbbhfwefhqefqe ciqb fc wkf bqwfcqcqwbfcqfbcnwfqwundfiqwnfqwubfqwifbqwiu</p></div>
+                            </div>
+                        </div>
+
+                        <div class="card custom-card">
+                            <div class="card-body">
+                                <div class="card-title"><h5 class="fw-bold">Jap Cong Ho</h5></div>
+                                <div class="card-text"><p>fwhekbbhfwefhqefqe ciqb fc wkf bqwfcqcqwbfcqfbcnwfqwundfiqwnfqwubfqwifbqwiu</p></div>
+                            </div>
+                        </div>
+
+                        <div class="card custom-card">
+                            <div class="card-body">
+                                <div class="card-title"><h5 class="fw-bold">Akun Bodong</h5></div>
+                                <div class="card-text"><p>aplikasi scam ciqb fc wkf bqwfcqcqwbfcqfbcnwfqwundfiqwnfqwubfqwifbqwiu</p></div>
+                            </div>
+                        </div>
+
+                        <div class="card custom-card">
+                            <div class="card-body">
+                                <div class="card-title"><h5 class="fw-bold">Tukang Ragebait</h5></div>
+                                <div class="card-text"><p>Bumi itu datar</p></div>
+                            </div>
+                        </div>
+
+                        <!-- duplikatnya biar loopnya smooth -->
+
+                        <div class="card custom-card">
+                            <div class="card-body">
+                                <div class="card-title"><h5 class="fw-bold">Andy Permana</h5></div>
+                                <div class="card-text"><p>fwhekbbhfwefhqefqe ciqb fc wkf bqwfcqcqwbfcqfbcnwfqwundfiqwnfqwubfqwifbqwiu</p></div>
+                            </div>
+                        </div>
+
+                        <div class="card custom-card">
+                            <div class="card-body">
+                                <div class="card-title"><h5 class="fw-bold">Joshua Yovany</h5></div>
+                                <div class="card-text"><p>fwhekbbhfwefhqefqe ciqb fc wkf bqwfcqcqwbfcqfbcnwfqwundfiqwnfqwubfqwifbqwiu</p></div>
+                            </div>
+                        </div>
+
+                        <div class="card custom-card">
+                            <div class="card-body">
+                                <div class="card-title"><h5 class="fw-bold">Jap Cong Ho</h5></div>
+                                <div class="card-text"><p>fwhekbbhfwefhqefqe ciqb fc wkf bqwfcqcqwbfcqfbcnwfqwundfiqwnfqwubfqwifbqwiu</p></div>
+                            </div>
+                        </div>
+
+                        <div class="card custom-card">
+                            <div class="card-body">
+                                <div class="card-title"><h5 class="fw-bold">Akun Bodong</h5></div>
+                                <div class="card-text"><p>aplikasi scam ciqb fc wkf bqwfcqcqwbfcqfbcnwfqwundfiqwnfqwubfqwifbqwiu</p></div>
+                            </div>
+                        </div>
+
+                        <div class="card custom-card">
+                            <div class="card-body">
+                                <div class="card-title"><h5 class="fw-bold">Tukang Ragebait</h5></div>
+                                <div class="card-text"><p>Bumi itu datar</p></div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="bg-dark text-light pt-3 pb-3">
+            <div class="container">
+                <div class="row">
+
+                    <div class="col-md-4 mb-4">
+                        <h5>Mentora</h5>
+                        <p>Platform pembelajaran daring untuk semua jenjang</p>
+                    </div>
+                    
+                    <div class="col-md-4 mb-4">
+                        <h6>Navigation</h6>
+                        <ul class="list-unstyled">
+                            <li><a href="javascript:void(0)" class="text-light text-decoration-none">Home</a></li>
+                            <li><a href="javascript:void(0)" class="text-light text-decoration-none">Paket</a></li>
+                            <li><a href="javascript:void(0)" class="text-light text-decoration-none">Info</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="col-md-4 mb-4">
+                        <h6>Contact</h6>
+                        <p>Email: mentora@class.id</p>
+                        <p>Instagram: @mentora</p>
+                    </div>
+
+                    <hr class="border-secondary">
+
+                    <div class="text-center">
+                        <small>© 2026 Mentora. All rights reserved.</small>
+                    </div>
+                </div>
+                <hr class="border-secondary">
+
+                <div class="text-center">
+                    <small>© 2026 Mentora. All rights reserved.</small>
+                </div>
+            </div>
+        </footer>
+
+
+
+        <script
+            src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+            integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+            crossorigin="anonymous"
+        ></script>
+
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+            integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+            crossorigin="anonymous"
+        ></script>
+    </body>
+</html>
