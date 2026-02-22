@@ -122,7 +122,7 @@
 
         <section id="events" class="py-5">
             <div class="container-fluid">
-                <h1 class="h1 text-center">Events</h1>
+                <h1 class="h1 fw-bold fs-1 text-center mb-5">Events</h1>
                 <div class="row justify-content-center">
                     <div class="col-sm-3 mb-2">
                         <div class="card">
@@ -165,9 +165,7 @@
 
         <section id="our-events" class="py-5 bg-light">
             <div class="container">
-                <marquee behavior="" direction="">
-                    <h1 class="h1">Our Events</h1>
-                </marquee>
+                <h1 class="fw-bold fs-1 text-center mb-5">Our Events</h1>
                 
                 <div id="heroCar" class="carousel slide" data-bs-ride="carousel">
                     <div class="carousel-inner">
@@ -383,17 +381,16 @@
             </div>
         </section>
 
-        <footer class="bg-dark text-light pt-3 pb-3">
+        <footer class="text-light pt-3 pb-3" style="background-color: #133c55;">
             <div class="container">
-                <div class="row">
-
-                    <div class="col-md-4 mb-4">
-                        <h5>Mentora</h5>
+                <div class="row justify-content-center">
+                    <div class="col-sm-3">
+                        <h5 class="fw-bold fs-3">Mentora</h5>
                         <p>Platform pembelajaran daring untuk semua jenjang</p>
                     </div>
                     
-                    <div class="col-md-4 mb-4">
-                        <h6>Navigation</h6>
+                    <div class="col-sm-3">
+                        <h6 class="fw-bold">Navigation</h6>
                         <ul class="list-unstyled">
                             <li><a href="javascript:void(0)" class="text-light text-decoration-none">Home</a></li>
                             <li><a href="javascript:void(0)" class="text-light text-decoration-none">Paket</a></li>
@@ -401,17 +398,13 @@
                         </ul>
                     </div>
 
-                    <div class="col-md-4 mb-4">
-                        <h6>Contact</h6>
+                    <div class="col-sm-3">
+                        <h6 class="fw-bold">Contact</h6>
                         <p>Email: mentora@class.id</p>
                         <p>Instagram: @mentora</p>
                     </div>
 
-                    <hr class="border-secondary">
-
-                    <div class="text-center">
-                        <small>© 2026 Mentora. All rights reserved.</small>
-                    </div>
+                    
                 </div>
                 <hr class="border-secondary">
 
