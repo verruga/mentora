@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8" />
+  <title>Mentora — Belajar Kuliah Terlengkap</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="mentora.css" />
+  <style>
+    /* ─── LANDING-ONLY STYLES ─── */
+    body { padding-top: 0; }
+
+    .landing-navbar {
+      position: fixed; top: 0; left: 0; right: 0;
+      height: var(--navbar-h);
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 2px solid var(--c-lightest);
+      display: flex; align-items: center;
+      padding: 0 2rem; gap: 1rem;
+      z-index: 1000;
+      box-shadow: 0 2px 12px rgba(19,60,85,0.07);
+    }
+    .landing-navbar .brand { font-weight: 800; font-size: 1.4rem; color: var(--c-darkest); letter-spacing: -0.5px; }
+    .landing-navbar .spacer { flex: 1; }
+    .btn-masuk {
+      background: linear-gradient(135deg, var(--c-dark), var(--c-mid));
+      color: #fff; border: none; border-radius: 25px;
+      padding: 0.45rem 1.4rem; font-family: 'Poppins', sans-serif;
+      font-size: 0.87rem; font-weight: 700; cursor: pointer;
+      transition: var(--transition);
+    }
+    .btn-masuk:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      background: linear-gradient(150deg, var(--c-darkest) 0%, var(--c-dark) 55%, var(--c-mid) 100%);
+      display: flex; align-items: center;
+      position: relative; overflow: hidden;
+      padding-top: var(--navbar-h);
+    }
+    .hero::before {
+      content: ''; position: absolute;
+      width: 600px; height: 600px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(145,229,246,0.15) 0%, transparent 70%);
+      top: -100px; right: -100px;
+    }
+    .hero::after {
+      content: ''; position: absolute;
+      width: 350px; height: 350px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(132,210,246,0.1) 0%, transparent 70%);
+      bottom: -60px; left: 8%;
+    }
+    .hero-content { position: relative; z-index: 2; color: #fff; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 20px; padding: 0.3rem 1rem;
+      font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.8px; text-transform: uppercase;
+      margin-bottom: 1.2rem;
+    }
+    .hero-title {
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      font-weight: 800; line-height: 1.15;
+      margin-bottom: 0.5rem;
+    }
+    .hero-title .accent { color: var(--c-lightest); }
+    .hero-subtitle {
+      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      font-weight: 600; color: var(--c-light);
+      margin-bottom: 1.2rem;
+    }
+    .hero-desc {
+      font-size: 0.95rem; color: rgba(255,255,255,0.78);
+      line-height: 1.75; max-width: 500px; margin-bottom: 2rem;
+    }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+    .btn-hero-primary {
+      background: var(--c-lightest); color: var(--c-darkest);
+      border: none; border-radius: 25px;
+      padding: 0.7rem 2rem; font-family: 'Poppins', sans-serif;
+      font-size: 0.95rem; font-weight: 700; cursor: pointer;
+      transition: var(--transition);
+    }
+    .btn-hero-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); background: #fff; }
+    .btn-hero-outline {
+      background: transparent; color: #fff;
+      border: 2px solid rgba(255,255,255,0.5);
+      border-radius: 25px; padding: 0.65rem 2rem;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.95rem; font-weight: 600; cursor: pointer;
+      transition: var(--transition);
+    }
+    .btn-hero-outline:hover { border-color: #fff; background: rgba(255,255,255,0.1); }
+
+    /* ─── STAT CARD ─── */
+    .stat-glass {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 20px;
+      padding: 2rem 1.5rem;
+      color: #fff;
+    }
+    .stat-item { text-align: center; padding: 0.5rem; }
+    .stat-num { font-size: 1.8rem; font-weight: 800; color: var(--c-lightest); line-height: 1; }
+    .stat-label { font-size: 0.75rem; opacity: 0.8; margin-top: 0.2rem; }
+    .stat-divider { border: none; border-top: 1px solid rgba(255,255,255,0.2); margin: 1rem 0; }
+
+    /* ─── FEATURES ─── */
+    .features { padding: 5rem 0; background: #fff; }
+    .section-chip {
+      display: inline-block;
+      background: rgba(89,165,216,0.12);
+      color: var(--c-dark); border-radius: 20px;
+      padding: 0.3rem 1rem; font-size: 0.78rem; font-weight: 700;
+      letter-spacing: 0.5px; text-transform: uppercase;
+      margin-bottom: 0.8rem;
+    }
+    .section-title {
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 800; color: var(--c-darkest);
+      margin-bottom: 0.5rem;
+    }
+    .section-sub { font-size: 0.95rem; color: var(--c-muted); max-width: 500px; }
+    .feat-card {
+      background: var(--c-bg);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      transition: var(--transition);
+      height: 100%;
+      border: 1.5px solid transparent;
+    }
+    .feat-card:hover { border-color: var(--c-light); background: #fff; box-shadow: var(--shadow); transform: translateY(-3px); }
+    .feat-icon {
+      width: 52px; height: 52px;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, var(--c-dark), var(--c-mid));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; margin-bottom: 1rem;
+    }
+    .feat-card h5 { font-weight: 700; font-size: 1rem; color: var(--c-darkest); margin-bottom: 0.4rem; }
+    .feat-card p { font-size: 0.85rem; color: var(--c-muted); line-height: 1.65; }
+
+    /* ─── CTA ─── */
+    .cta-section {
+      background: linear-gradient(135deg, var(--c-darkest), var(--c-dark));
+      padding: 4rem 0; color: #fff; text-align: center;
+    }
+    .cta-section h2 { font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 800; margin-bottom: 0.8rem; }
+    .cta-section p { font-size: 0.95rem; opacity: 0.8; margin-bottom: 1.5rem; }
+
+    /* ─── FOOTER ─── */
+    .m-footer {
+      background: var(--c-darkest);
+      color: rgba(255,255,255,0.75);
+      padding: 3rem 0 1.5rem;
+    }
+    .m-footer .brand { font-weight: 800; font-size: 1.3rem; color: #fff; margin-bottom: 0.5rem; }
+    .m-footer .footer-desc { font-size: 0.85rem; line-height: 1.7; color: rgba(255,255,255,0.6); max-width: 260px; }
+    .m-footer h6 { font-weight: 700; color: var(--c-lightest); font-size: 0.82rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.8rem; }
+    .m-footer a { display: block; font-size: 0.85rem; color: rgba(255,255,255,0.65); margin-bottom: 0.4rem; transition: var(--transition); }
+    .m-footer a:hover { color: var(--c-lightest); }
+    .m-footer .footer-contact { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; margin-bottom: 0.4rem; }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); margin-top: 2rem; padding-top: 1.2rem; font-size: 0.78rem; color: rgba(255,255,255,0.35); text-align: center; }
+
+    /* ─── MODAL ─── */
+    .modal-content { border-radius: 20px; border: none; box-shadow: var(--shadow-lg); }
+    .modal-mentora-header {
+      background: linear-gradient(135deg, var(--c-darkest), var(--c-dark));
+      border-radius: 20px 20px 0 0; padding: 1.5rem;
+      border-bottom: none;
+    }
+    .modal-mentora-header h5 { font-weight: 700; font-size: 1.2rem; color: #fff; margin: 0; }
+    .modal-mentora-header .btn-close { filter: invert(1); opacity: 0.8; }
+    .form-label-m { font-weight: 600; font-size: 0.83rem; color: var(--c-darkest); margin-bottom: 0.3rem; display: block; }
+    .form-control-m {
+      border: 1.5px solid #d0e8f5; border-radius: var(--radius-sm);
+      padding: 0.6rem 1rem; font-family: 'Poppins', sans-serif;
+      font-size: 0.88rem; width: 100%; outline: none;
+      transition: var(--transition);
+    }
+    .form-control-m:focus { border-color: var(--c-mid); box-shadow: 0 0 0 3px rgba(89,165,216,0.15); }
+    .role-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1.2rem; }
+    .role-opt {
+      border: 2px solid #d0e8f5; border-radius: var(--radius-sm);
+      padding: 1rem; text-align: center; cursor: pointer;
+      transition: var(--transition);
+    }
+    .role-opt:hover { border-color: var(--c-mid); background: rgba(89,165,216,0.05); }
+    .role-opt.selected { border-color: var(--c-dark); background: rgba(89,165,216,0.1); }
+    .role-opt .role-emoji { font-size: 1.8rem; }
+    .role-opt .role-name { font-size: 0.87rem; font-weight: 700; color: var(--c-darkest); margin-top: 0.3rem; }
+    .tab-pill { display: flex; gap: 0.4rem; margin-bottom: 1.2rem; }
+    .tab-pill button {
+      flex: 1; padding: 0.5rem;
+      border-radius: 20px; border: none; cursor: pointer;
+      font-family: 'Poppins', sans-serif; font-size: 0.85rem; font-weight: 600;
+      transition: var(--transition);
+    }
+    .tab-pill button.active { background: var(--c-dark); color: #fff; }
+    .tab-pill button:not(.active) { background: var(--c-bg); color: var(--c-muted); }
+    .link-sm { font-size: 0.8rem; color: var(--c-dark); text-decoration: none; font-weight: 500; }
+    .link-sm:hover { text-decoration: underline; }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in { animation: fadeInUp 0.6s ease both; }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ NAVBAR ═══ -->
+  <nav class="landing-navbar">
+    <a class="brand" href="index.html">Mentora</a>
+    <div class="spacer"></div>
+    <a href="paket.html" class="btn-ghost btn-sm me-2" style="font-size:0.85rem; padding:0.4rem 1rem; border:1.5px solid #dde4ea; border-radius:20px; color:var(--c-muted); cursor:pointer; font-family:'Poppins',sans-serif; font-weight:600; background:transparent; transition:.2s;">Lihat Paket</a>
+    <button class="btn-masuk" id="btnMasuk">Masuk / Daftar</button>
+  </nav>
+
+  <!-- ═══ HERO ═══ -->
+  <section class="hero">
+    <div class="container">
+      <div class="row align-items-center g-5">
+        <div class="col-lg-7 hero-content">
+          <div class="hero-badge fade-in">🎓 Platform Belajar #1 Indonesia</div>
+          <h1 class="hero-title fade-in delay-1">
+            Aplikasi Belajar Kuliah<br>
+            <span class="accent">Terlengkap</span> di Indonesia
+          </h1>
+          <p class="hero-subtitle fade-in delay-2">Powered by Mentora AI</p>
+          <p class="hero-desc fade-in delay-2">
+            Akses video, pembahasan soal, rangkuman, dan alat belajar dengan dukungan AI untuk membantumu raih IPK idaman.
+          </p>
+          <div class="hero-actions fade-in delay-3">
+            <button class="btn-hero-primary" id="btnDaftar">Daftar Sekarang</button>
+            <button class="btn-hero-outline" onclick="window.location.href='paket.html'">Telusuri Kursus</button>
+          </div>
+        </div>
+        <div class="col-lg-5 col-md-8 mx-auto mx-lg-0 fade-in delay-4">
+          <div class="stat-glass">
+            <div class="row g-0">
+              <div class="col-4 stat-item">
+                <div class="stat-num">500+</div>
+                <div class="stat-label">Video Materi</div>
+              </div>
+              <div class="col-4 stat-item" style="border-left:1px solid rgba(255,255,255,0.2); border-right:1px solid rgba(255,255,255,0.2);">
+                <div class="stat-num">50K+</div>
+                <div class="stat-label">Pengguna Aktif</div>
+              </div>
+              <div class="col-4 stat-item">
+                <div class="stat-num">95%</div>
+                <div class="stat-label">IPK Meningkat</div>
+              </div>
+            </div>
+            <hr class="stat-divider">
+            <div style="display:flex; flex-direction:column; gap:0.6rem;">
+              <div style="display:flex; align-items:center; gap:0.8rem; font-size:0.85rem; opacity:0.9;">
+                <span style="font-size:1.1rem;">🤖</span> AI assistant siap bantu belajarmu 24/7
+              </div>
+              <div style="display:flex; align-items:center; gap:0.8rem; font-size:0.85rem; opacity:0.9;">
+                <span style="font-size:1.1rem;">🏆</span> Sertifikat digital resmi setiap modul
+              </div>
+              <div style="display:flex; align-items:center; gap:0.8rem; font-size:0.85rem; opacity:0.9;">
+                <span style="font-size:1.1rem;">👨‍🏫</span> Native teacher berpengalaman
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FEATURES ═══ -->
+  <section class="features">
+    <div class="container">
+      <div class="text-center mb-5">
+        <div class="section-chip">Fitur Unggulan</div>
+        <h2 class="section-title">Semua yang kamu butuhkan<br>ada di Mentora</h2>
+        <p class="section-sub mx-auto">Satu platform, semua kebutuhan belajarmu terpenuhi.</p>
+      </div>
+      <div class="row g-4">
+        <div class="col-sm-6 col-lg-3">
+          <div class="feat-card">
+            <div class="feat-icon">🎬</div>
+            <h5>Video Pembelajaran</h5>
+            <p>Ribuan video materi dari dosen & tutor terpercaya, bisa ditonton kapan saja.</p>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <div class="feat-card">
+            <div class="feat-icon">📝</div>
+            <h5>Pembahasan Soal</h5>
+            <p>Latihan soal dengan pembahasan lengkap step-by-step untuk setiap topik.</p>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <div class="feat-card">
+            <div class="feat-icon">📋</div>
+            <h5>Rangkuman Materi</h5>
+            <p>Ringkasan padat yang mudah dipahami, siap cetak untuk belajar offline.</p>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <div class="feat-card">
+            <div class="feat-icon">🤖</div>
+            <h5>AI Assistant</h5>
+            <p>Tanya apa saja tentang materi, AI Mentora siap menjawab 24 jam penuh.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ CTA ═══ -->
+  <section class="cta-section">
+    <div class="container">
+      <h2>Siap raih IPK impianmu?</h2>
+      <p>Bergabung dengan 50.000+ pelajar yang sudah belajar di Mentora.</p>
+      <button class="btn-hero-primary" id="btnCtaDaftar">Mulai Gratis Sekarang</button>
+    </div>
+  </section>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer class="m-footer">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="brand">Mentora</div>
+          <p class="footer-desc">Platform belajar kuliah terlengkap di Indonesia dengan dukungan AI.</p>
+        </div>
+        <div class="col-md-2 col-6">
+          <h6>Aplikasi</h6>
+          <a href="#">Beranda</a>
+          <a href="paket.html">Paket Langganan</a>
+          <a href="#">Tentang Kami</a>
+        </div>
+        <div class="col-md-3 col-6">
+          <h6>Fitur</h6>
+          <a href="#">Video Materi</a>
+          <a href="#">Bank Soal</a>
+          <a href="#">Live Practice</a>
+        </div>
+        <div class="col-md-3">
+          <h6>Contact Us</h6>
+          <div class="footer-contact"><span>📍</span> Jl. ABC No.20, Jakarta Barat</div>
+          <div class="footer-contact"><span>📞</span> +62 813 1111 0000</div>
+          <div class="footer-contact"><span>✉️</span> mentora@gmail.com</div>
+        </div>
+      </div>
+      <div class="footer-bottom">© 2025 Mentora. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <!-- ═══ MODAL AUTH ═══ -->
+  <div class="modal fade" id="modalAuth" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:420px;">
+      <div class="modal-content">
+        <div class="modal-mentora-header d-flex align-items-center justify-content-between">
+          <h5>Selamat Datang di Mentora</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body p-4">
+
+          <!-- STEP 1: Pilih peran -->
+          <div id="stepRole">
+            <p style="font-size:0.9rem; font-weight:600; color:var(--c-darkest); margin-bottom:1rem;">Aku mau bergabung sebagai:</p>
+            <div class="role-selector">
+              <div class="role-opt selected" onclick="selectRole(this)">
+                <div class="role-emoji">🎓</div>
+                <div class="role-name">Murid</div>
+              </div>
+              <div class="role-opt" onclick="selectRole(this)">
+                <div class="role-emoji">👨‍🏫</div>
+                <div class="role-name">Pengajar</div>
+              </div>
+            </div>
+            <button class="btn-primary btn-block" onclick="showLoginStep()">Lanjutkan →</button>
+            <p style="text-align:center; font-size:0.78rem; color:var(--c-muted); margin-top:1rem;">
+              🔒 Prototype mode — klik Lanjutkan untuk langsung masuk
+            </p>
+          </div>
+
+          <!-- STEP 2: Login/Register -->
+          <div id="stepLogin" style="display:none;">
+            <button onclick="showRoleStep()" style="background:none;border:none;cursor:pointer;font-size:0.82rem;color:var(--c-mid);font-family:'Poppins',sans-serif;padding:0;margin-bottom:1rem;">← Kembali</button>
+            <div class="tab-pill">
+              <button id="tabMasuk" class="active" onclick="switchTab('masuk')">Masuk</button>
+              <button id="tabDaftar" onclick="switchTab('daftar')">Daftar</button>
+            </div>
+
+            <div id="formMasuk">
+              <div style="margin-bottom:1rem;">
+                <label class="form-label-m">Email</label>
+                <input class="form-control-m" type="email" placeholder="dummy@gmail.com" value="dummy@gmail.com" />
+              </div>
+              <div style="margin-bottom:0.5rem;">
+                <label class="form-label-m">Password</label>
+                <input class="form-control-m" type="password" placeholder="••••••••" value="password" />
+              </div>
+              <div style="text-align:right; margin-bottom:1.2rem;">
+                <a href="#" class="link-sm">Lupa Password?</a>
+              </div>
+              <button class="btn-primary btn-block" onclick="doLogin()">Masuk ke Mentora</button>
+            </div>
+
+            <div id="formDaftar" style="display:none;">
+              <div style="margin-bottom:1rem;">
+                <label class="form-label-m">Nama Lengkap</label>
+                <input class="form-control-m" type="text" placeholder="Nama kamu" />
+              </div>
+              <div style="margin-bottom:1rem;">
+                <label class="form-label-m">Email</label>
+                <input class="form-control-m" type="email" placeholder="Email aktif" />
+              </div>
+              <div style="margin-bottom:1.2rem;">
+                <label class="form-label-m">Password</label>
+                <input class="form-control-m" type="password" placeholder="Buat password" />
+              </div>
+              <button class="btn-primary btn-block" onclick="doLogin()">Daftar & Masuk</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const authModal = new bootstrap.Modal(document.getElementById('modalAuth'));
+
+    document.getElementById('btnMasuk').addEventListener('click', () => authModal.show());
+    document.getElementById('btnDaftar').addEventListener('click', () => authModal.show());
+    document.getElementById('btnCtaDaftar').addEventListener('click', () => authModal.show());
+
+    function selectRole(el) {
+      document.querySelectorAll('.role-opt').forEach(c => c.classList.remove('selected'));
+      el.classList.add('selected');
+    }
+    function showLoginStep() {
+      document.getElementById('stepRole').style.display = 'none';
+      document.getElementById('stepLogin').style.display = 'block';
+    }
+    function showRoleStep() {
+      document.getElementById('stepLogin').style.display = 'none';
+      document.getElementById('stepRole').style.display = 'block';
+    }
+    function switchTab(t) {
+      const isMasuk = t === 'masuk';
+      document.getElementById('formMasuk').style.display = isMasuk ? 'block' : 'none';
+      document.getElementById('formDaftar').style.display = isMasuk ? 'none' : 'block';
+      document.getElementById('tabMasuk').className = isMasuk ? 'active' : '';
+      document.getElementById('tabDaftar').className = !isMasuk ? 'active' : '';
+    }
+    function doLogin() {
+      // Prototype: langsung set session & redirect ke paket
+      sessionStorage.setItem('loggedIn', 'true');
+      sessionStorage.setItem('userName', 'Kevin K.');
+      authModal.hide();
+      window.location.href = 'paket.html';
+    }
+  </script>
+</body>
+</html>

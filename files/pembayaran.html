@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8" />
+  <title>Pembayaran — Mentora</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="mentora.css" />
+  <style>
+    body { padding-top: var(--navbar-h); background: var(--c-bg); }
+
+    .pay-layout {
+      max-width: 900px; margin: 0 auto;
+      padding: 2rem 1rem 4rem;
+    }
+
+    .pay-title {
+      font-size: 1.5rem; font-weight: 800;
+      color: var(--c-darkest); margin-bottom: 0.3rem;
+    }
+    .pay-sub { font-size: 0.88rem; color: var(--c-muted); margin-bottom: 1.5rem; }
+
+    /* Paket summary */
+    .paket-summary {
+      background: linear-gradient(135deg, var(--c-darkest), var(--c-dark));
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      color: #fff;
+      margin-bottom: 1.5rem;
+    }
+    .paket-summary .ps-name {
+      font-size: 1.1rem; font-weight: 800;
+    }
+    .paket-summary .ps-price {
+      font-size: 1.4rem; font-weight: 800;
+      color: var(--c-lightest);
+    }
+    .paket-summary .ps-valid {
+      font-size: 0.8rem; opacity: 0.75; margin-top: 0.2rem;
+    }
+    .ps-features { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+    .ps-feat-chip {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 16px;
+      padding: 0.2rem 0.75rem;
+      font-size: 0.78rem;
+      font-weight: 500;
+    }
+
+    /* Section card */
+    .pay-section {
+      background: #fff;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 1.25rem;
+      overflow: hidden;
+    }
+    .pay-section-header {
+      padding: 1rem 1.5rem;
+      border-bottom: 1.5px solid #f0f4f8;
+      display: flex; align-items: center;
+      justify-content: space-between;
+    }
+    .pay-section-header h6 {
+      font-weight: 700; font-size: 0.95rem;
+      color: var(--c-darkest); margin: 0;
+    }
+    .pay-section-body { padding: 1.25rem 1.5rem; }
+
+    /* Promo input */
+    .promo-wrap {
+      display: flex; gap: 0.75rem; align-items: center;
+    }
+    .promo-input {
+      flex: 1;
+      border: 1.5px solid #d0e8f5;
+      border-radius: var(--radius-sm);
+      padding: 0.6rem 1rem;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.88rem;
+      outline: none; transition: var(--transition);
+    }
+    .promo-input:focus { border-color: var(--c-mid); }
+    .btn-apply {
+      background: var(--c-dark); color: #fff;
+      border: none; border-radius: var(--radius-sm);
+      padding: 0.6rem 1.2rem;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.85rem; font-weight: 700;
+      cursor: pointer; transition: var(--transition);
+      white-space: nowrap;
+    }
+    .btn-apply:hover { background: var(--c-darkest); }
+    .promo-success {
+      display: none;
+      align-items: center; gap: 0.5rem;
+      font-size: 0.82rem; color: #27ae60;
+      font-weight: 600; margin-top: 0.6rem;
+    }
+
+    /* Payment methods */
+    .method-list { display: flex; flex-direction: column; gap: 0.6rem; }
+    .method-item {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 0.9rem 1rem;
+      border: 2px solid #e8f4fc;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .method-item:hover { border-color: var(--c-mid); }
+    .method-item.selected { border-color: var(--c-dark); background: rgba(56,111,164,0.05); }
+    .method-icon {
+      width: 40px; height: 40px;
+      border-radius: 8px;
+      background: var(--c-bg);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+    }
+    .method-name { font-weight: 600; font-size: 0.88rem; color: var(--c-darkest); }
+    .method-desc { font-size: 0.75rem; color: var(--c-muted); }
+    .method-radio { margin-left: auto; }
+    .method-radio input { width: 18px; height: 18px; accent-color: var(--c-dark); }
+
+    .lihat-semua {
+      font-size: 0.82rem; color: var(--c-dark);
+      font-weight: 600; cursor: pointer;
+      background: none; border: none;
+      font-family: 'Poppins', sans-serif;
+    }
+    .lihat-semua:hover { text-decoration: underline; }
+
+    /* Price summary */
+    .price-row {
+      display: flex; justify-content: space-between;
+      align-items: center;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid #f0f4f8;
+      font-size: 0.88rem;
+    }
+    .price-row:last-child { border-bottom: none; }
+    .price-row .label { color: var(--c-muted); }
+    .price-row .value { font-weight: 600; color: var(--c-text); }
+    .price-row .value.strikethrough { text-decoration: line-through; color: var(--c-muted); font-weight: 400; }
+    .price-row .value.discount { color: #27ae60; }
+    .price-row.total .label { font-weight: 800; font-size: 1rem; color: var(--c-darkest); }
+    .price-row.total .value { font-weight: 800; font-size: 1.2rem; color: var(--c-darkest); }
+
+    /* Countdown */
+    .promo-banner {
+      background: linear-gradient(135deg, #e74c3c, #c0392b);
+      color: #fff; border-radius: var(--radius);
+      padding: 0.9rem 1.2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 0.5rem;
+      margin-bottom: 1.25rem;
+    }
+    .promo-banner .pb-left { display: flex; align-items: center; gap: 0.6rem; font-weight: 700; font-size: 0.92rem; }
+    .promo-banner .pb-timer { font-size: 1.1rem; font-weight: 800; color: #ffd700; }
+
+    /* Pay button */
+    .btn-bayar {
+      width: 100%; padding: 0.85rem;
+      background: linear-gradient(135deg, var(--c-dark), var(--c-mid));
+      color: #fff; border: none; border-radius: 30px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 1rem; font-weight: 800;
+      cursor: pointer; transition: var(--transition);
+      margin-top: 0.5rem;
+      letter-spacing: 0.3px;
+    }
+    .btn-bayar:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: var(--shadow-lg); }
+
+    .safe-note {
+      text-align: center; font-size: 0.75rem;
+      color: var(--c-muted); margin-top: 0.7rem;
+    }
+
+    /* Modal success */
+    .success-icon { font-size: 4rem; text-align: center; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="m-navbar">
+    <a class="brand" href="index.html">Mentora</a>
+    <div class="nav-links">
+      <a href="index.html">Beranda</a>
+      <a href="paket.html">Paket</a>
+    </div>
+    <div class="spacer"></div>
+    <div class="user-chip">
+      <div class="avatar" id="userAvatar">K</div>
+      <span id="userName">Kevin K.</span>
+      <span class="badge-trial">Free Trial</span>
+    </div>
+  </nav>
+
+  <div class="pay-layout">
+
+    <!-- Breadcrumb -->
+    <div style="font-size:0.78rem; color:var(--c-muted); margin-bottom:1rem;">
+      <a href="paket.html" style="color:var(--c-dark);">Paket Langganan</a> › <span>Pembayaran</span>
+    </div>
+
+    <h1 class="pay-title">Detail Pembayaran</h1>
+    <p class="pay-sub">Lengkapi pembayaran untuk mengakses materi eksklusif Mentora.</p>
+
+    <!-- Promo countdown -->
+    <div class="promo-banner">
+      <div class="pb-left">🔥 Diskon Spesial 20%!!!</div>
+      <div>Berakhir dalam: <span class="pb-timer" id="countdown">02:18:52</span></div>
+    </div>
+
+    <div class="row g-4">
+
+      <!-- Left column -->
+      <div class="col-lg-7">
+
+        <!-- Paket Summary -->
+        <div class="paket-summary">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:0.5rem;">
+            <div>
+              <div class="ps-name" id="paketNama">Intensif Bahasa Inggris</div>
+              <div class="ps-valid">Paket aktif hingga 1 Maret 2026</div>
+            </div>
+            <div class="ps-price" id="paketHarga">Rp200.000<span style="font-size:0.9rem;font-weight:500;opacity:.8;">/bulan</span></div>
+          </div>
+          <div class="ps-features">
+            <span class="ps-feat-chip">4x Live Practice/bulan</span>
+            <span class="ps-feat-chip">4 Modul Intensif</span>
+            <span class="ps-feat-chip">Sertifikat Digital</span>
+            <span class="ps-feat-chip">Native Teacher</span>
+            <span class="ps-feat-chip">Laporan Skill</span>
+          </div>
+        </div>
+
+        <!-- Kode Promo -->
+        <div class="pay-section">
+          <div class="pay-section-header">
+            <h6>🏷️ Gunakan Kode Promo</h6>
+          </div>
+          <div class="pay-section-body">
+            <div class="promo-wrap">
+              <input class="promo-input" id="promoInput" type="text" placeholder="Masukkan kode promo..." value="kode-promo-baru" />
+              <button class="btn-apply" onclick="applyPromo()">Terapkan</button>
+            </div>
+            <div class="promo-success" id="promoSuccess">
+              ✅ Kode promo berhasil! Diskon 20% diterapkan.
+            </div>
+          </div>
+        </div>
+
+        <!-- Metode Pembayaran -->
+        <div class="pay-section">
+          <div class="pay-section-header">
+            <h6>💳 Pilih Metode Pembayaran</h6>
+            <button class="lihat-semua">Lihat Semua</button>
+          </div>
+          <div class="pay-section-body">
+            <div class="method-list">
+              <div class="method-item selected" onclick="selectMethod(this)">
+                <div class="method-icon">🏦</div>
+                <div>
+                  <div class="method-name">Transfer Bank — BCA</div>
+                  <div class="method-desc">Virtual Account BCA</div>
+                </div>
+                <div class="method-radio"><input type="radio" name="method" checked /></div>
+              </div>
+              <div class="method-item" onclick="selectMethod(this)">
+                <div class="method-icon">💚</div>
+                <div>
+                  <div class="method-name">GoPay</div>
+                  <div class="method-desc">Bayar via GoPay / GoTagihan</div>
+                </div>
+                <div class="method-radio"><input type="radio" name="method" /></div>
+              </div>
+              <div class="method-item" onclick="selectMethod(this)">
+                <div class="method-icon">🔵</div>
+                <div>
+                  <div class="method-name">OVO</div>
+                  <div class="method-desc">Bayar via OVO Balance</div>
+                </div>
+                <div class="method-radio"><input type="radio" name="method" /></div>
+              </div>
+              <div class="method-item" onclick="selectMethod(this)">
+                <div class="method-icon">💳</div>
+                <div>
+                  <div class="method-name">Kartu Kredit / Debit</div>
+                  <div class="method-desc">Visa, Mastercard, JCB</div>
+                </div>
+                <div class="method-radio"><input type="radio" name="method" /></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right column: Summary -->
+      <div class="col-lg-5">
+        <div class="pay-section" style="position:sticky; top:calc(var(--navbar-h) + 1rem);">
+          <div class="pay-section-header">
+            <h6>🧾 Ringkasan Pembayaran</h6>
+          </div>
+          <div class="pay-section-body">
+            <div class="price-row">
+              <span class="label">Harga Normal</span>
+              <span class="value strikethrough" id="hargaNormal">Rp200.000</span>
+            </div>
+            <div class="price-row" id="diskonRow" style="display:none;">
+              <span class="label">Diskon 20%</span>
+              <span class="value discount" id="diskonVal">- Rp40.000</span>
+            </div>
+            <div class="price-row">
+              <span class="label">PPN (0%)</span>
+              <span class="value">Rp0</span>
+            </div>
+            <div class="price-row total">
+              <span class="label">Total Harga</span>
+              <span class="value" id="totalHarga">Rp200.000</span>
+            </div>
+
+            <button class="btn-bayar" onclick="doBayar()">Bayar Sekarang →</button>
+            <p class="safe-note">🔒 Pembayaran aman & terenkripsi</p>
+            <p class="safe-note" style="margin-top:0.3rem;"><a href="paket.html" style="color:var(--c-dark);">← Kembali ke Paket</a></p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MODAL SUCCESS -->
+  <div class="modal fade" id="modalSuccess" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:380px;">
+      <div class="modal-content" style="border-radius:20px; border:none;">
+        <div class="modal-body p-4 text-center">
+          <div class="success-icon">🎉</div>
+          <h5 style="font-weight:800; color:var(--c-darkest); margin-bottom:0.4rem;">Pembayaran Berhasil!</h5>
+          <p style="font-size:0.88rem; color:var(--c-muted); margin-bottom:1.5rem;">
+            Selamat! Kamu sudah aktif di paket <strong id="successPaket">Intensif Bahasa Inggris</strong>. Yuk mulai belajar!
+          </p>
+          <button class="btn-primary btn-block" onclick="goToMateri()">Mulai Belajar →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Load session data
+    const name = sessionStorage.getItem('userName') || 'Kevin K.';
+    document.getElementById('userName').textContent = name;
+    document.getElementById('userAvatar').textContent = name.charAt(0).toUpperCase();
+
+    const paketNama = sessionStorage.getItem('selectedPaket') || 'Intensif Bahasa Inggris';
+    const paketHarga = sessionStorage.getItem('selectedHarga') || 'Rp200.000';
+    document.getElementById('paketNama').textContent = paketNama;
+    document.getElementById('paketHarga').innerHTML = paketHarga + '<span style="font-size:.9rem;font-weight:500;opacity:.8;">/bulan</span>';
+    document.getElementById('hargaNormal').textContent = paketHarga;
+    document.getElementById('totalHarga').textContent = paketHarga;
+
+    // Countdown
+    let t = 2*3600 + 18*60 + 52;
+    function tick() {
+      t--;
+      const h = String(Math.floor(t/3600)).padStart(2,'0');
+      const m = String(Math.floor((t%3600)/60)).padStart(2,'0');
+      const s = String(t%60).padStart(2,'0');
+      const el = document.getElementById('countdown');
+      if (el) el.textContent = `${h}:${m}:${s}`;
+      if (t > 0) setTimeout(tick, 1000);
+    }
+    tick();
+
+    // Promo
+    let promoApplied = false;
+    function applyPromo() {
+      const code = document.getElementById('promoInput').value.trim();
+      if (code && !promoApplied) {
+        promoApplied = true;
+        document.getElementById('promoSuccess').style.display = 'flex';
+
+        // Hitung diskon 20%
+        const hargaStr = paketHarga.replace(/[^0-9]/g,'');
+        const hargaNum = parseInt(hargaStr);
+        const disc = Math.round(hargaNum * 0.2);
+        const total = hargaNum - disc;
+
+        document.getElementById('diskonVal').textContent = `- Rp${disc.toLocaleString('id-ID')}`;
+        document.getElementById('totalHarga').textContent = `Rp${total.toLocaleString('id-ID')}`;
+        document.getElementById('diskonRow').style.display = 'flex';
+      }
+    }
+
+    // Method select
+    function selectMethod(el) {
+      document.querySelectorAll('.method-item').forEach(m => m.classList.remove('selected'));
+      el.classList.add('selected');
+      el.querySelector('input[type=radio]').checked = true;
+    }
+
+    // Bayar
+    const successModal = new bootstrap.Modal(document.getElementById('modalSuccess'));
+    function doBayar() {
+      document.getElementById('successPaket').textContent = paketNama;
+      sessionStorage.setItem('paidPaket', paketNama);
+      successModal.show();
+    }
+    function goToMateri() {
+      successModal.hide();
+      window.location.href = 'materi.html';
+    }
+  </script>
+</body>
+</html>
