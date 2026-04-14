@@ -7,19 +7,14 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="mentora.css" />
   <style>
-    /* ─── LANDING-ONLY STYLES ─── */
     body { padding-top: 0; }
 
     .landing-navbar {
-      position: fixed; top: 0; left: 0; right: 0;
-      height: var(--navbar-h);
-      background: rgba(255,255,255,0.95);
-      backdrop-filter: blur(10px);
+      position: fixed; top: 0; left: 0; right: 0; height: var(--navbar-h);
+      background: rgba(255,255,255,0.97); backdrop-filter: blur(10px);
       border-bottom: 2px solid var(--c-lightest);
-      display: flex; align-items: center;
-      padding: 0 2rem; gap: 1rem;
-      z-index: 1000;
-      box-shadow: 0 2px 12px rgba(19,60,85,0.07);
+      display: flex; align-items: center; padding: 0 2rem; gap: 1rem;
+      z-index: 1000; box-shadow: 0 2px 12px rgba(19,60,85,0.07);
     }
     .landing-navbar .brand { font-weight: 800; font-size: 1.4rem; color: var(--c-darkest); letter-spacing: -0.5px; }
     .landing-navbar .spacer { flex: 1; }
@@ -27,409 +22,371 @@
       background: linear-gradient(135deg, var(--c-dark), var(--c-mid));
       color: #fff; border: none; border-radius: 25px;
       padding: 0.45rem 1.4rem; font-family: 'Poppins', sans-serif;
-      font-size: 0.87rem; font-weight: 700; cursor: pointer;
-      transition: var(--transition);
+      font-size: 0.87rem; font-weight: 700; cursor: pointer; transition: var(--transition);
     }
     .btn-masuk:hover { opacity: 0.88; transform: translateY(-1px); }
 
-    /* ─── HERO ─── */
+    /* Hero */
     .hero {
       min-height: 100vh;
       background: linear-gradient(150deg, var(--c-darkest) 0%, var(--c-dark) 55%, var(--c-mid) 100%);
-      display: flex; align-items: center;
-      position: relative; overflow: hidden;
+      display: flex; align-items: center; position: relative; overflow: hidden;
       padding-top: var(--navbar-h);
     }
-    .hero::before {
-      content: ''; position: absolute;
-      width: 600px; height: 600px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(145,229,246,0.15) 0%, transparent 70%);
-      top: -100px; right: -100px;
-    }
-    .hero::after {
-      content: ''; position: absolute;
-      width: 350px; height: 350px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(132,210,246,0.1) 0%, transparent 70%);
-      bottom: -60px; left: 8%;
-    }
-    .hero-content { position: relative; z-index: 2; color: #fff; }
-    .hero-badge {
-      display: inline-flex; align-items: center; gap: 0.4rem;
-      background: rgba(255,255,255,0.15);
-      border: 1px solid rgba(255,255,255,0.3);
-      border-radius: 20px; padding: 0.3rem 1rem;
-      font-size: 0.78rem; font-weight: 600;
-      letter-spacing: 0.8px; text-transform: uppercase;
-      margin-bottom: 1.2rem;
-    }
-    .hero-title {
-      font-size: clamp(2rem, 5vw, 3.4rem);
-      font-weight: 800; line-height: 1.15;
-      margin-bottom: 0.5rem;
-    }
-    .hero-title .accent { color: var(--c-lightest); }
-    .hero-subtitle {
-      font-size: clamp(1rem, 2.5vw, 1.4rem);
-      font-weight: 600; color: var(--c-light);
-      margin-bottom: 1.2rem;
-    }
-    .hero-desc {
-      font-size: 0.95rem; color: rgba(255,255,255,0.78);
-      line-height: 1.75; max-width: 500px; margin-bottom: 2rem;
-    }
-    .hero-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
-    .btn-hero-primary {
-      background: var(--c-lightest); color: var(--c-darkest);
-      border: none; border-radius: 25px;
-      padding: 0.7rem 2rem; font-family: 'Poppins', sans-serif;
-      font-size: 0.95rem; font-weight: 700; cursor: pointer;
-      transition: var(--transition);
-    }
-    .btn-hero-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); background: #fff; }
-    .btn-hero-outline {
-      background: transparent; color: #fff;
-      border: 2px solid rgba(255,255,255,0.5);
-      border-radius: 25px; padding: 0.65rem 2rem;
-      font-family: 'Poppins', sans-serif;
-      font-size: 0.95rem; font-weight: 600; cursor: pointer;
-      transition: var(--transition);
-    }
-    .btn-hero-outline:hover { border-color: #fff; background: rgba(255,255,255,0.1); }
+    .hero::before { content:''; position:absolute; width:600px; height:600px; border-radius:50%; background:radial-gradient(circle,rgba(145,229,246,.15) 0%,transparent 70%); top:-100px; right:-100px; }
+    .hero::after  { content:''; position:absolute; width:350px; height:350px; border-radius:50%; background:radial-gradient(circle,rgba(132,210,246,.1) 0%,transparent 70%); bottom:-60px; left:8%; }
+    .hero-content { position:relative; z-index:2; color:#fff; }
+    .hero-badge { display:inline-flex; align-items:center; gap:.4rem; background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.3); border-radius:20px; padding:.3rem 1rem; font-size:.78rem; font-weight:600; letter-spacing:.8px; text-transform:uppercase; margin-bottom:1.2rem; }
+    .hero-title { font-size:clamp(2rem,5vw,3.4rem); font-weight:800; line-height:1.15; margin-bottom:.5rem; }
+    .hero-title .accent { color:var(--c-lightest); }
+    .hero-subtitle { font-size:clamp(1rem,2.5vw,1.4rem); font-weight:600; color:var(--c-light); margin-bottom:1.2rem; }
+    .hero-desc { font-size:.95rem; color:rgba(255,255,255,.78); line-height:1.75; max-width:500px; margin-bottom:2rem; }
+    .hero-actions { display:flex; flex-wrap:wrap; gap:.75rem; }
+    .btn-hero-primary { background:var(--c-lightest); color:var(--c-darkest); border:none; border-radius:25px; padding:.7rem 2rem; font-family:'Poppins',sans-serif; font-size:.95rem; font-weight:700; cursor:pointer; transition:var(--transition); }
+    .btn-hero-primary:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,.2); background:#fff; }
+    .btn-hero-outline { background:transparent; color:#fff; border:2px solid rgba(255,255,255,.5); border-radius:25px; padding:.65rem 2rem; font-family:'Poppins',sans-serif; font-size:.95rem; font-weight:600; cursor:pointer; transition:var(--transition); }
+    .btn-hero-outline:hover { border-color:#fff; background:rgba(255,255,255,.1); }
+    .stat-glass { background:rgba(255,255,255,.1); backdrop-filter:blur(16px); border:1px solid rgba(255,255,255,.2); border-radius:20px; padding:2rem 1.5rem; color:#fff; }
+    .stat-item { text-align:center; padding:.5rem; }
+    .stat-num { font-size:1.8rem; font-weight:800; color:var(--c-lightest); line-height:1; }
+    .stat-label { font-size:.75rem; opacity:.8; margin-top:.2rem; }
+    .stat-divider { border:none; border-top:1px solid rgba(255,255,255,.2); margin:1rem 0; }
 
-    /* ─── STAT CARD ─── */
-    .stat-glass {
-      background: rgba(255,255,255,0.1);
-      backdrop-filter: blur(16px);
-      border: 1px solid rgba(255,255,255,0.2);
-      border-radius: 20px;
-      padding: 2rem 1.5rem;
-      color: #fff;
-    }
-    .stat-item { text-align: center; padding: 0.5rem; }
-    .stat-num { font-size: 1.8rem; font-weight: 800; color: var(--c-lightest); line-height: 1; }
-    .stat-label { font-size: 0.75rem; opacity: 0.8; margin-top: 0.2rem; }
-    .stat-divider { border: none; border-top: 1px solid rgba(255,255,255,0.2); margin: 1rem 0; }
+    /* Dashboard */
+    .dashboard-page { display:none; padding-top:var(--navbar-h); min-height:100vh; background:var(--c-bg); }
+    .dash-hero { background:linear-gradient(135deg,var(--c-darkest) 0%,var(--c-dark) 100%); padding:2rem 0 1.5rem; color:#fff; }
+    .dash-hero h2 { font-size:1.4rem; font-weight:800; margin-bottom:.2rem; }
+    .dash-hero p { font-size:.88rem; opacity:.8; }
+    .dash-stats { display:flex; gap:1rem; margin-top:1.2rem; flex-wrap:wrap; }
+    .dash-stat { background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.2); border-radius:var(--radius-sm); padding:.6rem 1.2rem; }
+    .dash-stat .ds-num { font-size:1.2rem; font-weight:800; color:var(--c-lightest); }
+    .dash-stat .ds-label { opacity:.8; font-size:.72rem; }
 
-    /* ─── FEATURES ─── */
-    .features { padding: 5rem 0; background: #fff; }
-    .section-chip {
-      display: inline-block;
-      background: rgba(89,165,216,0.12);
-      color: var(--c-dark); border-radius: 20px;
-      padding: 0.3rem 1rem; font-size: 0.78rem; font-weight: 700;
-      letter-spacing: 0.5px; text-transform: uppercase;
-      margin-bottom: 0.8rem;
-    }
-    .section-title {
-      font-size: clamp(1.5rem, 3vw, 2rem);
-      font-weight: 800; color: var(--c-darkest);
-      margin-bottom: 0.5rem;
-    }
-    .section-sub { font-size: 0.95rem; color: var(--c-muted); max-width: 500px; }
-    .feat-card {
-      background: var(--c-bg);
-      border-radius: var(--radius);
-      padding: 1.5rem;
-      transition: var(--transition);
-      height: 100%;
-      border: 1.5px solid transparent;
-    }
-    .feat-card:hover { border-color: var(--c-light); background: #fff; box-shadow: var(--shadow); transform: translateY(-3px); }
-    .feat-icon {
-      width: 52px; height: 52px;
-      border-radius: var(--radius-sm);
-      background: linear-gradient(135deg, var(--c-dark), var(--c-mid));
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.4rem; margin-bottom: 1rem;
-    }
-    .feat-card h5 { font-weight: 700; font-size: 1rem; color: var(--c-darkest); margin-bottom: 0.4rem; }
-    .feat-card p { font-size: 0.85rem; color: var(--c-muted); line-height: 1.65; }
+    .dash-section { padding:1.5rem 0; }
+    .dash-section-title { font-size:1.05rem; font-weight:800; color:var(--c-darkest); margin-bottom:1rem; display:flex; align-items:center; gap:.5rem; }
 
-    /* ─── CTA ─── */
-    .cta-section {
-      background: linear-gradient(135deg, var(--c-darkest), var(--c-dark));
-      padding: 4rem 0; color: #fff; text-align: center;
-    }
-    .cta-section h2 { font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 800; margin-bottom: 0.8rem; }
-    .cta-section p { font-size: 0.95rem; opacity: 0.8; margin-bottom: 1.5rem; }
+    .continue-card { background:#fff; border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; display:flex; cursor:pointer; transition:var(--transition); border:2px solid transparent; }
+    .continue-card:hover { border-color:var(--c-light); box-shadow:var(--shadow-lg); transform:translateY(-2px); }
+    .continue-thumb { width:130px; flex-shrink:0; background:linear-gradient(135deg,var(--c-darkest),var(--c-dark)); display:flex; align-items:center; justify-content:center; font-size:2.2rem; }
+    .continue-body { padding:1rem 1.2rem; flex:1; }
+    .continue-body .cb-tag { font-size:.7rem; font-weight:700; color:var(--c-dark); background:rgba(89,165,216,.12); padding:.15rem .6rem; border-radius:8px; display:inline-block; margin-bottom:.4rem; }
+    .continue-body h6 { font-weight:700; font-size:.9rem; color:var(--c-darkest); margin-bottom:.2rem; line-height:1.4; }
+    .continue-body .cb-sub { font-size:.75rem; color:var(--c-muted); margin-bottom:.6rem; }
+    .continue-progress { height:5px; background:#e8f4fc; border-radius:3px; margin-bottom:.4rem; }
+    .continue-progress-fill { height:100%; background:linear-gradient(90deg,var(--c-dark),var(--c-mid)); border-radius:3px; }
+    .continue-pct { font-size:.72rem; color:var(--c-muted); }
+    .btn-continue { background:linear-gradient(135deg,var(--c-dark),var(--c-mid)); color:#fff; border:none; border-radius:20px; padding:.4rem 1rem; font-family:'Poppins',sans-serif; font-size:.78rem; font-weight:700; cursor:pointer; transition:var(--transition); white-space:nowrap; align-self:center; margin-right:1rem; flex-shrink:0; }
+    .btn-continue:hover { opacity:.88; }
 
-    /* ─── FOOTER ─── */
-    .m-footer {
-      background: var(--c-darkest);
-      color: rgba(255,255,255,0.75);
-      padding: 3rem 0 1.5rem;
-    }
-    .m-footer .brand { font-weight: 800; font-size: 1.3rem; color: #fff; margin-bottom: 0.5rem; }
-    .m-footer .footer-desc { font-size: 0.85rem; line-height: 1.7; color: rgba(255,255,255,0.6); max-width: 260px; }
-    .m-footer h6 { font-weight: 700; color: var(--c-lightest); font-size: 0.82rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.8rem; }
-    .m-footer a { display: block; font-size: 0.85rem; color: rgba(255,255,255,0.65); margin-bottom: 0.4rem; transition: var(--transition); }
-    .m-footer a:hover { color: var(--c-lightest); }
-    .m-footer .footer-contact { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; margin-bottom: 0.4rem; }
-    .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); margin-top: 2rem; padding-top: 1.2rem; font-size: 0.78rem; color: rgba(255,255,255,0.35); text-align: center; }
+    .material-filter { display:flex; gap:.4rem; flex-wrap:wrap; margin-bottom:1rem; align-items:center; }
+    .mf-tab { padding:.35rem .9rem; border-radius:16px; border:1.5px solid #d0e4f5; background:#fff; font-family:'Poppins',sans-serif; font-size:.78rem; font-weight:600; color:var(--c-muted); cursor:pointer; transition:var(--transition); }
+    .mf-tab.active { background:var(--c-dark); border-color:var(--c-dark); color:#fff; }
+    .mf-search { margin-left:auto; border:1.5px solid #d0e4f5; border-radius:20px; padding:.35rem 1rem; font-family:'Poppins',sans-serif; font-size:.8rem; outline:none; transition:var(--transition); width:180px; }
+    .mf-search:focus { border-color:var(--c-mid); }
 
-    /* ─── MODAL ─── */
-    .modal-content { border-radius: 20px; border: none; box-shadow: var(--shadow-lg); }
-    .modal-mentora-header {
-      background: linear-gradient(135deg, var(--c-darkest), var(--c-dark));
-      border-radius: 20px 20px 0 0; padding: 1.5rem;
-      border-bottom: none;
-    }
-    .modal-mentora-header h5 { font-weight: 700; font-size: 1.2rem; color: #fff; margin: 0; }
-    .modal-mentora-header .btn-close { filter: invert(1); opacity: 0.8; }
-    .form-label-m { font-weight: 600; font-size: 0.83rem; color: var(--c-darkest); margin-bottom: 0.3rem; display: block; }
-    .form-control-m {
-      border: 1.5px solid #d0e8f5; border-radius: var(--radius-sm);
-      padding: 0.6rem 1rem; font-family: 'Poppins', sans-serif;
-      font-size: 0.88rem; width: 100%; outline: none;
-      transition: var(--transition);
-    }
-    .form-control-m:focus { border-color: var(--c-mid); box-shadow: 0 0 0 3px rgba(89,165,216,0.15); }
-    .role-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1.2rem; }
-    .role-opt {
-      border: 2px solid #d0e8f5; border-radius: var(--radius-sm);
-      padding: 1rem; text-align: center; cursor: pointer;
-      transition: var(--transition);
-    }
-    .role-opt:hover { border-color: var(--c-mid); background: rgba(89,165,216,0.05); }
-    .role-opt.selected { border-color: var(--c-dark); background: rgba(89,165,216,0.1); }
-    .role-opt .role-emoji { font-size: 1.8rem; }
-    .role-opt .role-name { font-size: 0.87rem; font-weight: 700; color: var(--c-darkest); margin-top: 0.3rem; }
-    .tab-pill { display: flex; gap: 0.4rem; margin-bottom: 1.2rem; }
-    .tab-pill button {
-      flex: 1; padding: 0.5rem;
-      border-radius: 20px; border: none; cursor: pointer;
-      font-family: 'Poppins', sans-serif; font-size: 0.85rem; font-weight: 600;
-      transition: var(--transition);
-    }
-    .tab-pill button.active { background: var(--c-dark); color: #fff; }
-    .tab-pill button:not(.active) { background: var(--c-bg); color: var(--c-muted); }
-    .link-sm { font-size: 0.8rem; color: var(--c-dark); text-decoration: none; font-weight: 500; }
-    .link-sm:hover { text-decoration: underline; }
+    .mat-card { background:#fff; border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; transition:var(--transition); cursor:pointer; border:2px solid transparent; height:100%; display:flex; flex-direction:column; }
+    .mat-card:hover { border-color:var(--c-light); transform:translateY(-3px); box-shadow:var(--shadow-lg); }
+    .mat-thumb { height:110px; display:flex; align-items:center; justify-content:center; font-size:2.5rem; position:relative; }
+    .mat-badge-top { position:absolute; top:.5rem; left:.5rem; background:rgba(255,255,255,.2); color:#fff; font-size:.65rem; font-weight:700; padding:.15rem .5rem; border-radius:8px; }
+    .mat-badge-status { position:absolute; top:.5rem; right:.5rem; font-size:.65rem; font-weight:700; padding:.15rem .5rem; border-radius:8px; }
+    .status-done { background:rgba(46,204,113,.2); color:#27ae60; }
+    .status-progress { background:rgba(243,156,18,.2); color:#e67e22; }
+    .status-new { background:rgba(89,165,216,.2); color:var(--c-dark); }
+    .mat-body { padding:.9rem; flex:1; }
+    .mat-body .mat-tag { font-size:.68rem; font-weight:700; color:var(--c-dark); opacity:.8; text-transform:uppercase; letter-spacing:.5px; }
+    .mat-body h6 { font-size:.85rem; font-weight:700; color:var(--c-darkest); margin:.2rem 0 .3rem; line-height:1.4; }
+    .mat-body .mat-sub { font-size:.72rem; color:var(--c-muted); margin-bottom:.5rem; }
+    .mat-progress { height:4px; background:#eef4fa; border-radius:2px; margin-bottom:.3rem; }
+    .mat-progress-fill { height:100%; border-radius:2px; background:linear-gradient(90deg,var(--c-dark),var(--c-mid)); }
+    .mat-footer { padding:.6rem .9rem; border-top:1px solid #f0f5fa; display:flex; align-items:center; justify-content:space-between; }
+    .mat-footer .mf-pct { font-size:.72rem; color:var(--c-muted); font-weight:600; }
+    .btn-mat { background:linear-gradient(135deg,var(--c-dark),var(--c-mid)); color:#fff; border:none; border-radius:16px; padding:.3rem .9rem; font-family:'Poppins',sans-serif; font-size:.75rem; font-weight:700; cursor:pointer; transition:var(--transition); }
+    .btn-mat:hover { opacity:.88; }
 
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .fade-in { animation: fadeInUp 0.6s ease both; }
-    .delay-1 { animation-delay: 0.1s; }
-    .delay-2 { animation-delay: 0.2s; }
-    .delay-3 { animation-delay: 0.3s; }
-    .delay-4 { animation-delay: 0.4s; }
+    /* Features */
+    .features { padding:5rem 0; background:#fff; }
+    .section-chip { display:inline-block; background:rgba(89,165,216,.12); color:var(--c-dark); border-radius:20px; padding:.3rem 1rem; font-size:.78rem; font-weight:700; letter-spacing:.5px; text-transform:uppercase; margin-bottom:.8rem; }
+    .section-title { font-size:clamp(1.5rem,3vw,2rem); font-weight:800; color:var(--c-darkest); margin-bottom:.5rem; }
+    .section-sub { font-size:.95rem; color:var(--c-muted); max-width:500px; }
+    .feat-card { background:var(--c-bg); border-radius:var(--radius); padding:1.5rem; transition:var(--transition); height:100%; border:1.5px solid transparent; }
+    .feat-card:hover { border-color:var(--c-light); background:#fff; box-shadow:var(--shadow); transform:translateY(-3px); }
+    .feat-icon { width:52px; height:52px; border-radius:var(--radius-sm); background:linear-gradient(135deg,var(--c-dark),var(--c-mid)); display:flex; align-items:center; justify-content:center; font-size:1.4rem; margin-bottom:1rem; }
+    .feat-card h5 { font-weight:700; font-size:1rem; color:var(--c-darkest); margin-bottom:.4rem; }
+    .feat-card p { font-size:.85rem; color:var(--c-muted); line-height:1.65; }
+
+    .cta-section { background:linear-gradient(135deg,var(--c-darkest),var(--c-dark)); padding:4rem 0; color:#fff; text-align:center; }
+    .cta-section h2 { font-size:clamp(1.4rem,3vw,2rem); font-weight:800; margin-bottom:.8rem; }
+    .cta-section p { font-size:.95rem; opacity:.8; margin-bottom:1.5rem; }
+    .m-footer { background:var(--c-darkest); color:rgba(255,255,255,.75); padding:3rem 0 1.5rem; }
+    .m-footer .brand { font-weight:800; font-size:1.3rem; color:#fff; margin-bottom:.5rem; }
+    .m-footer .footer-desc { font-size:.85rem; line-height:1.7; color:rgba(255,255,255,.6); max-width:260px; }
+    .m-footer h6 { font-weight:700; color:var(--c-lightest); font-size:.82rem; text-transform:uppercase; letter-spacing:1px; margin-bottom:.8rem; }
+    .m-footer a { display:block; font-size:.85rem; color:rgba(255,255,255,.65); margin-bottom:.4rem; transition:var(--transition); }
+    .m-footer a:hover { color:var(--c-lightest); }
+    .m-footer .footer-contact { display:flex; align-items:center; gap:.5rem; font-size:.85rem; margin-bottom:.4rem; }
+    .footer-bottom { border-top:1px solid rgba(255,255,255,.1); margin-top:2rem; padding-top:1.2rem; font-size:.78rem; color:rgba(255,255,255,.35); text-align:center; }
+
+    /* Modal */
+    .modal-content { border-radius:20px; border:none; box-shadow:var(--shadow-lg); overflow:hidden; }
+    .modal-mentora-header { background:linear-gradient(135deg,var(--c-darkest),var(--c-dark)); padding:1.5rem; border-bottom:none; }
+    .modal-mentora-header h5 { font-weight:700; font-size:1.2rem; color:#fff; margin:0; }
+    .modal-mentora-header .btn-close { filter:invert(1); opacity:.8; }
+    .form-label-m { font-weight:600; font-size:.83rem; color:var(--c-darkest); margin-bottom:.3rem; display:block; }
+    .form-control-m { border:1.5px solid #d0e8f5; border-radius:var(--radius-sm); padding:.6rem 1rem; font-family:'Poppins',sans-serif; font-size:.88rem; width:100%; outline:none; transition:var(--transition); }
+    .form-control-m:focus { border-color:var(--c-mid); box-shadow:0 0 0 3px rgba(89,165,216,.15); }
+    .tab-pill { display:flex; gap:.4rem; margin-bottom:1.2rem; }
+    .tab-pill button { flex:1; padding:.5rem; border-radius:20px; border:none; cursor:pointer; font-family:'Poppins',sans-serif; font-size:.85rem; font-weight:600; transition:var(--transition); }
+    .tab-pill button.active { background:var(--c-dark); color:#fff; }
+    .tab-pill button:not(.active) { background:var(--c-bg); color:var(--c-muted); }
+    .link-sm { font-size:.8rem; color:var(--c-dark); text-decoration:none; font-weight:500; }
+    .link-sm:hover { text-decoration:underline; }
+
+    /* Nav user chip */
+    .nav-user-chip { display:flex; align-items:center; gap:.6rem; background:var(--c-bg); border:1.5px solid var(--c-lightest); border-radius:30px; padding:.3rem 1rem .3rem .5rem; font-size:.82rem; font-weight:600; color:var(--c-darkest); cursor:pointer; transition:var(--transition); }
+    .nav-user-chip:hover { border-color:var(--c-mid); }
+    .nav-user-chip .avatar { width:28px; height:28px; border-radius:50%; background:linear-gradient(135deg,var(--c-dark),var(--c-mid)); display:flex; align-items:center; justify-content:center; font-size:.72rem; color:#fff; font-weight:700; }
+    .nav-badge-active { background:var(--c-lightest); color:var(--c-darkest); font-size:.65rem; font-weight:700; border-radius:10px; padding:.15rem .6rem; }
+
+    @keyframes fadeInUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+    .fade-in{animation:fadeInUp .6s ease both} .delay-1{animation-delay:.1s} .delay-2{animation-delay:.2s} .delay-3{animation-delay:.3s} .delay-4{animation-delay:.4s}
   </style>
 </head>
 <body>
 
-  <!-- ═══ NAVBAR ═══ -->
+  <!-- NAVBAR -->
   <nav class="landing-navbar">
     <a class="brand" href="index.html">Mentora</a>
     <div class="spacer"></div>
-    <a href="paket.html" class="btn-ghost btn-sm me-2" style="font-size:0.85rem; padding:0.4rem 1rem; border:1.5px solid #dde4ea; border-radius:20px; color:var(--c-muted); cursor:pointer; font-family:'Poppins',sans-serif; font-weight:600; background:transparent; transition:.2s;">Lihat Paket</a>
-    <button class="btn-masuk" id="btnMasuk">Masuk / Daftar</button>
+    <!-- Guest -->
+    <div id="guestNav">
+      <a href="paket.html" style="font-size:.85rem;font-weight:600;color:var(--c-muted);padding:.4rem 1rem;border:1.5px solid #dde4ea;border-radius:20px;cursor:pointer;font-family:'Poppins',sans-serif;background:transparent;margin-right:.5rem;text-decoration:none;">Lihat Paket</a>
+      <button class="btn-masuk" id="btnMasuk">Masuk / Daftar</button>
+    </div>
+    <!-- Logged in -->
+    <div id="loggedNav" style="display:none;align-items:center;gap:.75rem;">
+      <a href="paket.html" style="font-size:.85rem;font-weight:600;color:var(--c-muted);padding:.4rem .8rem;border-radius:16px;text-decoration:none;">Paket</a>
+      <a href="admin.html" style="font-size:.85rem;font-weight:600;color:var(--c-muted);padding:.4rem .8rem;border-radius:16px;text-decoration:none;">⚙ Admin</a>
+      <div class="nav-user-chip" onclick="doLogout()">
+        <div class="avatar" id="navAvatar">K</div>
+        <span id="navName">Kevin K.</span>
+        <span class="nav-badge-active">Aktif</span>
+      </div>
+    </div>
   </nav>
 
-  <!-- ═══ HERO ═══ -->
-  <section class="hero">
-    <div class="container">
-      <div class="row align-items-center g-5">
-        <div class="col-lg-7 hero-content">
-          <div class="hero-badge fade-in">🎓 Platform Belajar #1 Indonesia</div>
-          <h1 class="hero-title fade-in delay-1">
-            Aplikasi Belajar Kuliah<br>
-            <span class="accent">Terlengkap</span> di Indonesia
-          </h1>
-          <p class="hero-subtitle fade-in delay-2">Powered by Mentora AI</p>
-          <p class="hero-desc fade-in delay-2">
-            Akses video, pembahasan soal, rangkuman, dan alat belajar dengan dukungan AI untuk membantumu raih IPK idaman.
-          </p>
-          <div class="hero-actions fade-in delay-3">
-            <button class="btn-hero-primary" id="btnDaftar">Daftar Sekarang</button>
-            <button class="btn-hero-outline" onclick="window.location.href='paket.html'">Telusuri Kursus</button>
-          </div>
-        </div>
-        <div class="col-lg-5 col-md-8 mx-auto mx-lg-0 fade-in delay-4">
-          <div class="stat-glass">
-            <div class="row g-0">
-              <div class="col-4 stat-item">
-                <div class="stat-num">500+</div>
-                <div class="stat-label">Video Materi</div>
-              </div>
-              <div class="col-4 stat-item" style="border-left:1px solid rgba(255,255,255,0.2); border-right:1px solid rgba(255,255,255,0.2);">
-                <div class="stat-num">50K+</div>
-                <div class="stat-label">Pengguna Aktif</div>
-              </div>
-              <div class="col-4 stat-item">
-                <div class="stat-num">95%</div>
-                <div class="stat-label">IPK Meningkat</div>
-              </div>
+  <!-- ═══ GUEST PAGE ═══ -->
+  <div id="guestPage">
+    <section class="hero">
+      <div class="container">
+        <div class="row align-items-center g-5">
+          <div class="col-lg-7 hero-content">
+            <div class="hero-badge fade-in">🎓 Platform Belajar #1 Indonesia</div>
+            <h1 class="hero-title fade-in delay-1">Aplikasi Belajar Kuliah<br><span class="accent">Terlengkap</span> di Indonesia</h1>
+            <p class="hero-subtitle fade-in delay-2">Powered by Mentora AI</p>
+            <p class="hero-desc fade-in delay-2">Akses video, pembahasan soal, rangkuman, dan alat belajar dengan dukungan AI untuk membantumu raih IPK idaman.</p>
+            <div class="hero-actions fade-in delay-3">
+              <button class="btn-hero-primary" id="btnDaftar">Daftar Sekarang</button>
+              <button class="btn-hero-outline" onclick="window.location.href='paket.html'">Telusuri Kursus</button>
             </div>
-            <hr class="stat-divider">
-            <div style="display:flex; flex-direction:column; gap:0.6rem;">
-              <div style="display:flex; align-items:center; gap:0.8rem; font-size:0.85rem; opacity:0.9;">
-                <span style="font-size:1.1rem;">🤖</span> AI assistant siap bantu belajarmu 24/7
+          </div>
+          <div class="col-lg-5 col-md-8 mx-auto mx-lg-0 fade-in delay-4">
+            <div class="stat-glass">
+              <div class="row g-0">
+                <div class="col-4 stat-item"><div class="stat-num">500+</div><div class="stat-label">Video Materi</div></div>
+                <div class="col-4 stat-item" style="border-left:1px solid rgba(255,255,255,.2);border-right:1px solid rgba(255,255,255,.2);"><div class="stat-num">50K+</div><div class="stat-label">Pengguna Aktif</div></div>
+                <div class="col-4 stat-item"><div class="stat-num">95%</div><div class="stat-label">IPK Meningkat</div></div>
               </div>
-              <div style="display:flex; align-items:center; gap:0.8rem; font-size:0.85rem; opacity:0.9;">
-                <span style="font-size:1.1rem;">🏆</span> Sertifikat digital resmi setiap modul
-              </div>
-              <div style="display:flex; align-items:center; gap:0.8rem; font-size:0.85rem; opacity:0.9;">
-                <span style="font-size:1.1rem;">👨‍🏫</span> Native teacher berpengalaman
+              <hr class="stat-divider">
+              <div style="display:flex;flex-direction:column;gap:.6rem;">
+                <div style="display:flex;align-items:center;gap:.8rem;font-size:.85rem;opacity:.9;"><span>🤖</span> AI assistant siap bantu belajarmu 24/7</div>
+                <div style="display:flex;align-items:center;gap:.8rem;font-size:.85rem;opacity:.9;"><span>🏆</span> Sertifikat digital resmi setiap modul</div>
+                <div style="display:flex;align-items:center;gap:.8rem;font-size:.85rem;opacity:.9;"><span>👨‍🏫</span> Native teacher berpengalaman</div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ═══ FEATURES ═══ -->
-  <section class="features">
-    <div class="container">
-      <div class="text-center mb-5">
-        <div class="section-chip">Fitur Unggulan</div>
-        <h2 class="section-title">Semua yang kamu butuhkan<br>ada di Mentora</h2>
-        <p class="section-sub mx-auto">Satu platform, semua kebutuhan belajarmu terpenuhi.</p>
-      </div>
-      <div class="row g-4">
-        <div class="col-sm-6 col-lg-3">
-          <div class="feat-card">
-            <div class="feat-icon">🎬</div>
-            <h5>Video Pembelajaran</h5>
-            <p>Ribuan video materi dari dosen & tutor terpercaya, bisa ditonton kapan saja.</p>
-          </div>
+    <section class="features">
+      <div class="container">
+        <div class="text-center mb-5">
+          <div class="section-chip">Fitur Unggulan</div>
+          <h2 class="section-title">Semua yang kamu butuhkan<br>ada di Mentora</h2>
+          <p class="section-sub mx-auto">Satu platform, semua kebutuhan belajarmu terpenuhi.</p>
         </div>
-        <div class="col-sm-6 col-lg-3">
-          <div class="feat-card">
-            <div class="feat-icon">📝</div>
-            <h5>Pembahasan Soal</h5>
-            <p>Latihan soal dengan pembahasan lengkap step-by-step untuk setiap topik.</p>
-          </div>
-        </div>
-        <div class="col-sm-6 col-lg-3">
-          <div class="feat-card">
-            <div class="feat-icon">📋</div>
-            <h5>Rangkuman Materi</h5>
-            <p>Ringkasan padat yang mudah dipahami, siap cetak untuk belajar offline.</p>
-          </div>
-        </div>
-        <div class="col-sm-6 col-lg-3">
-          <div class="feat-card">
-            <div class="feat-icon">🤖</div>
-            <h5>AI Assistant</h5>
-            <p>Tanya apa saja tentang materi, AI Mentora siap menjawab 24 jam penuh.</p>
-          </div>
+        <div class="row g-4">
+          <div class="col-sm-6 col-lg-3"><div class="feat-card"><div class="feat-icon">🎬</div><h5>Video Pembelajaran</h5><p>Ribuan video materi dari dosen & tutor terpercaya, bisa ditonton kapan saja.</p></div></div>
+          <div class="col-sm-6 col-lg-3"><div class="feat-card"><div class="feat-icon">📝</div><h5>Pembahasan Soal</h5><p>Latihan soal dengan pembahasan lengkap step-by-step untuk setiap topik.</p></div></div>
+          <div class="col-sm-6 col-lg-3"><div class="feat-card"><div class="feat-icon">📋</div><h5>Rangkuman Materi</h5><p>Ringkasan padat yang mudah dipahami, siap cetak untuk belajar offline.</p></div></div>
+          <div class="col-sm-6 col-lg-3"><div class="feat-card"><div class="feat-icon">🤖</div><h5>AI Assistant</h5><p>Tanya apa saja tentang materi, AI Mentora siap menjawab 24 jam penuh.</p></div></div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ═══ CTA ═══ -->
-  <section class="cta-section">
-    <div class="container">
-      <h2>Siap raih IPK impianmu?</h2>
-      <p>Bergabung dengan 50.000+ pelajar yang sudah belajar di Mentora.</p>
-      <button class="btn-hero-primary" id="btnCtaDaftar">Mulai Gratis Sekarang</button>
-    </div>
-  </section>
+    <section class="cta-section">
+      <div class="container">
+        <h2>Siap raih IPK impianmu?</h2>
+        <p>Bergabung dengan 50.000+ pelajar yang sudah belajar di Mentora.</p>
+        <button class="btn-hero-primary" id="btnCtaDaftar">Mulai Gratis Sekarang</button>
+      </div>
+    </section>
 
-  <!-- ═══ FOOTER ═══ -->
-  <footer class="m-footer">
-    <div class="container">
-      <div class="row g-4">
-        <div class="col-md-4">
-          <div class="brand">Mentora</div>
-          <p class="footer-desc">Platform belajar kuliah terlengkap di Indonesia dengan dukungan AI.</p>
+    <footer class="m-footer">
+      <div class="container">
+        <div class="row g-4">
+          <div class="col-md-4"><div class="brand">Mentora</div><p class="footer-desc">Platform belajar kuliah terlengkap di Indonesia dengan dukungan AI.</p></div>
+          <div class="col-md-2 col-6"><h6>Aplikasi</h6><a href="#">Beranda</a><a href="paket.html">Paket Langganan</a><a href="#">Tentang Kami</a></div>
+          <div class="col-md-3 col-6"><h6>Fitur</h6><a href="#">Video Materi</a><a href="#">Bank Soal</a><a href="#">Live Practice</a></div>
+          <div class="col-md-3"><h6>Contact Us</h6><div class="footer-contact"><span>📍</span> Jl. ABC No.20, Jakarta Barat</div><div class="footer-contact"><span>📞</span> +62 813 1111 0000</div><div class="footer-contact"><span>✉️</span> mentora@gmail.com</div></div>
         </div>
-        <div class="col-md-2 col-6">
-          <h6>Aplikasi</h6>
-          <a href="#">Beranda</a>
-          <a href="paket.html">Paket Langganan</a>
-          <a href="#">Tentang Kami</a>
-        </div>
-        <div class="col-md-3 col-6">
-          <h6>Fitur</h6>
-          <a href="#">Video Materi</a>
-          <a href="#">Bank Soal</a>
-          <a href="#">Live Practice</a>
-        </div>
-        <div class="col-md-3">
-          <h6>Contact Us</h6>
-          <div class="footer-contact"><span>📍</span> Jl. ABC No.20, Jakarta Barat</div>
-          <div class="footer-contact"><span>📞</span> +62 813 1111 0000</div>
-          <div class="footer-contact"><span>✉️</span> mentora@gmail.com</div>
+        <div class="footer-bottom">© 2025 Mentora. All rights reserved.</div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ═══ LOGGED-IN DASHBOARD ═══ -->
+  <div class="dashboard-page" id="dashPage">
+    <div class="dash-hero">
+      <div class="container">
+        <h2>Halo, <span id="dashName">Kevin</span>! 👋</h2>
+        <p>Lanjutkan belajarmu hari ini dan capai target IPK-mu.</p>
+        <div class="dash-stats">
+          <div class="dash-stat"><div class="ds-num">3</div><div class="ds-label">Materi Selesai</div></div>
+          <div class="dash-stat"><div class="ds-num">80%</div><div class="ds-label">Progress Modul 1</div></div>
+          <div class="dash-stat"><div class="ds-num">Free Trial</div><div class="ds-label">Status Paket</div></div>
         </div>
       </div>
-      <div class="footer-bottom">© 2025 Mentora. All rights reserved.</div>
     </div>
-  </footer>
+
+    <div class="container py-4">
+      <!-- Continue Learning -->
+      <div class="dash-section">
+        <div class="dash-section-title">▶ Lanjutkan Belajar</div>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <div class="continue-card" onclick="window.location.href='materi.html'">
+              <div class="continue-thumb">📖</div>
+              <div class="continue-body">
+                <div class="cb-tag">📚 Materi</div>
+                <h6>1.1.1 Learning Orientation</h6>
+                <div class="cb-sub">Module 1: Introduction — Bahasa Inggris Intensif</div>
+                <div class="continue-progress"><div class="continue-progress-fill" style="width:80%"></div></div>
+                <div class="continue-pct">Progress: 80%</div>
+              </div>
+              <button class="btn-continue">Lanjutkan</button>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="continue-card" onclick="window.location.href='materi.html'">
+              <div class="continue-thumb">🎯</div>
+              <div class="continue-body">
+                <div class="cb-tag">🏆 Kursus</div>
+                <h6>The Art of Blending Aesthetics and Functionality in UI/UX</h6>
+                <div class="cb-sub">Kursus Desain — Intermediate</div>
+                <div class="continue-progress"><div class="continue-progress-fill" style="width:55%"></div></div>
+                <div class="continue-pct">Progress: 55%</div>
+              </div>
+              <button class="btn-continue">Lanjutkan</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- All Materials -->
+      <div class="dash-section">
+        <div class="dash-section-title">📦 Semua Materi</div>
+        <div class="material-filter">
+          <button class="mf-tab active">Semua Status</button>
+          <button class="mf-tab">Belum Mulai</button>
+          <button class="mf-tab">Sedang Dikerjakan</button>
+          <button class="mf-tab">Selesai</button>
+          <input class="mf-search" type="text" placeholder="🔍  Cari materi..." />
+        </div>
+        <div class="row g-3">
+          <div class="col-sm-6 col-lg-4">
+            <div class="mat-card" onclick="window.location.href='materi.html'">
+              <div class="mat-thumb" style="background:linear-gradient(135deg,#133C55,#386FA4);">📖<span class="mat-badge-top">20 Materi</span><span class="mat-badge-status status-progress">In Progress</span></div>
+              <div class="mat-body"><div class="mat-tag">📚 Materi</div><h6>1.1 Foundation — Learning Orientation</h6><div class="mat-sub">Bahasa Inggris Intensif · Modul 1</div><div class="mat-progress"><div class="mat-progress-fill" style="width:80%"></div></div></div>
+              <div class="mat-footer"><span class="mf-pct">Progress 80%</span><button class="btn-mat">Lanjutkan</button></div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-4">
+            <div class="mat-card" onclick="window.location.href='materi.html'">
+              <div class="mat-thumb" style="background:linear-gradient(135deg,#386FA4,#59A5D8);">🎯<span class="mat-badge-top">15 Soal</span><span class="mat-badge-status status-done">Selesai</span></div>
+              <div class="mat-body"><div class="mat-tag">📝 Latihan</div><h6>5 Steps Optimizing User Experience</h6><div class="mat-sub">UX Design · Beginner</div><div class="mat-progress"><div class="mat-progress-fill" style="width:100%"></div></div></div>
+              <div class="mat-footer"><span class="mf-pct">Selesai</span><button class="btn-mat">Lihat</button></div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-4">
+            <div class="mat-card" onclick="window.location.href='materi.html'">
+              <div class="mat-thumb" style="background:linear-gradient(135deg,#59A5D8,#84D2F6);">💡<span class="mat-badge-top">12 Materi</span><span class="mat-badge-status status-progress">In Progress</span></div>
+              <div class="mat-body"><div class="mat-tag">📚 Materi</div><h6>Heuristics: 10 Usability Principles To Improve UI Design</h6><div class="mat-sub">UI Design · Intermediate</div><div class="mat-progress"><div class="mat-progress-fill" style="width:32%"></div></div></div>
+              <div class="mat-footer"><span class="mf-pct">Progress 32%</span><button class="btn-mat">Lanjutkan</button></div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-4">
+            <div class="mat-card" onclick="window.location.href='materi.html'">
+              <div class="mat-thumb" style="background:linear-gradient(135deg,#133C55,#59A5D8);">🧠<span class="mat-badge-top">20 Materi</span><span class="mat-badge-status status-new">Belum Mulai</span></div>
+              <div class="mat-body"><div class="mat-tag">🏆 Kursus</div><h6>General Knowledge & Methodology — Layout & Spacing</h6><div class="mat-sub">UI/UX Design · All Levels</div><div class="mat-progress"><div class="mat-progress-fill" style="width:0%"></div></div></div>
+              <div class="mat-footer"><span class="mf-pct">Belum Mulai</span><button class="btn-mat">Mulai</button></div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-4">
+            <div class="mat-card" onclick="window.location.href='materi.html'">
+              <div class="mat-thumb" style="background:linear-gradient(135deg,#386FA4,#84D2F6);">✏️<span class="mat-badge-top">8 Materi</span><span class="mat-badge-status status-done">Selesai</span></div>
+              <div class="mat-body"><div class="mat-tag">📚 Materi</div><h6>Mastering UI Design for Impactful Solutions</h6><div class="mat-sub">UI Design · Advanced</div><div class="mat-progress"><div class="mat-progress-fill" style="width:100%"></div></div></div>
+              <div class="mat-footer"><span class="mf-pct">Selesai</span><button class="btn-mat">Lihat</button></div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-4">
+            <div class="mat-card" onclick="window.location.href='materi.html'">
+              <div class="mat-thumb" style="background:linear-gradient(135deg,#133C55,#386FA4);">🎙️<span class="mat-badge-top">4 Sesi</span><span class="mat-badge-status status-new">Belum Mulai</span></div>
+              <div class="mat-body"><div class="mat-tag">🎙️ Live Practice</div><h6>Conversation Practice — Simple & Compound Sentences</h6><div class="mat-sub">Bahasa Inggris · Module 1</div><div class="mat-progress"><div class="mat-progress-fill" style="width:0%"></div></div></div>
+              <div class="mat-footer"><span class="mf-pct">Belum Mulai</span><button class="btn-mat">Daftar</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Upgrade Banner -->
+      <div class="m-card" style="background:linear-gradient(135deg,var(--c-darkest),var(--c-dark));color:#fff;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:2rem;">
+        <div>
+          <div style="font-size:.8rem;opacity:.8;margin-bottom:.2rem;">🚀 Upgrade Paket</div>
+          <div style="font-weight:800;font-size:1.05rem;">Akses semua materi tanpa batas! <span style="color:var(--c-lightest);">Mulai dari Rp60.000/bulan</span></div>
+        </div>
+        <button onclick="window.location.href='paket.html'" style="background:var(--c-lightest);color:var(--c-darkest);border:none;border-radius:25px;padding:.6rem 1.5rem;font-family:'Poppins',sans-serif;font-weight:700;font-size:.9rem;cursor:pointer;">Lihat Paket →</button>
+      </div>
+    </div>
+  </div>
 
   <!-- ═══ MODAL AUTH ═══ -->
   <div class="modal fade" id="modalAuth" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered" style="max-width:420px;">
       <div class="modal-content">
         <div class="modal-mentora-header d-flex align-items-center justify-content-between">
-          <h5>Selamat Datang di Mentora</h5>
+          <h5 id="modalTitle">Masuk ke Mentora</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body p-4">
-
-          <!-- STEP 1: Pilih peran -->
-          <div id="stepRole">
-            <p style="font-size:0.9rem; font-weight:600; color:var(--c-darkest); margin-bottom:1rem;">Aku mau bergabung sebagai:</p>
-            <div class="role-selector">
-              <div class="role-opt selected" onclick="selectRole(this)">
-                <div class="role-emoji">🎓</div>
-                <div class="role-name">Murid</div>
-              </div>
-              <div class="role-opt" onclick="selectRole(this)">
-                <div class="role-emoji">👨‍🏫</div>
-                <div class="role-name">Pengajar</div>
-              </div>
-            </div>
-            <button class="btn-primary btn-block" onclick="showLoginStep()">Lanjutkan →</button>
-            <p style="text-align:center; font-size:0.78rem; color:var(--c-muted); margin-top:1rem;">
-              🔒 Prototype mode — klik Lanjutkan untuk langsung masuk
-            </p>
+          <div class="tab-pill">
+            <button id="tabMasuk" class="active" onclick="switchTab('masuk')">Masuk</button>
+            <button id="tabDaftar" onclick="switchTab('daftar')">Daftar</button>
           </div>
-
-          <!-- STEP 2: Login/Register -->
-          <div id="stepLogin" style="display:none;">
-            <button onclick="showRoleStep()" style="background:none;border:none;cursor:pointer;font-size:0.82rem;color:var(--c-mid);font-family:'Poppins',sans-serif;padding:0;margin-bottom:1rem;">← Kembali</button>
-            <div class="tab-pill">
-              <button id="tabMasuk" class="active" onclick="switchTab('masuk')">Masuk</button>
-              <button id="tabDaftar" onclick="switchTab('daftar')">Daftar</button>
-            </div>
-
-            <div id="formMasuk">
-              <div style="margin-bottom:1rem;">
-                <label class="form-label-m">Email</label>
-                <input class="form-control-m" type="email" placeholder="dummy@gmail.com" value="dummy@gmail.com" />
-              </div>
-              <div style="margin-bottom:0.5rem;">
-                <label class="form-label-m">Password</label>
-                <input class="form-control-m" type="password" placeholder="••••••••" value="password" />
-              </div>
-              <div style="text-align:right; margin-bottom:1.2rem;">
-                <a href="#" class="link-sm">Lupa Password?</a>
-              </div>
-              <button class="btn-primary btn-block" onclick="doLogin()">Masuk ke Mentora</button>
-            </div>
-
-            <div id="formDaftar" style="display:none;">
-              <div style="margin-bottom:1rem;">
-                <label class="form-label-m">Nama Lengkap</label>
-                <input class="form-control-m" type="text" placeholder="Nama kamu" />
-              </div>
-              <div style="margin-bottom:1rem;">
-                <label class="form-label-m">Email</label>
-                <input class="form-control-m" type="email" placeholder="Email aktif" />
-              </div>
-              <div style="margin-bottom:1.2rem;">
-                <label class="form-label-m">Password</label>
-                <input class="form-control-m" type="password" placeholder="Buat password" />
-              </div>
-              <button class="btn-primary btn-block" onclick="doLogin()">Daftar & Masuk</button>
-            </div>
+          <div id="formMasuk">
+            <div style="margin-bottom:1rem;"><label class="form-label-m">Email</label><input class="form-control-m" type="email" value="dummy@gmail.com" /></div>
+            <div style="margin-bottom:.5rem;"><label class="form-label-m">Password</label><input class="form-control-m" type="password" value="password" /></div>
+            <div style="text-align:right;margin-bottom:1.2rem;"><a href="#" class="link-sm">Lupa Password?</a></div>
+            <button class="btn-primary btn-block" onclick="doLogin()">Masuk ke Mentora</button>
+            <p style="text-align:center;font-size:.75rem;color:var(--c-muted);margin-top:.8rem;">Pengajar / Admin? <a href="admin.html" style="color:var(--c-dark);font-weight:600;">Login di sini →</a></p>
           </div>
-
+          <div id="formDaftar" style="display:none;">
+            <div style="margin-bottom:1rem;"><label class="form-label-m">Nama Lengkap</label><input class="form-control-m" type="text" placeholder="Nama kamu" /></div>
+            <div style="margin-bottom:1rem;"><label class="form-label-m">Email</label><input class="form-control-m" type="email" placeholder="Email aktif" /></div>
+            <div style="margin-bottom:1.2rem;"><label class="form-label-m">Password</label><input class="form-control-m" type="password" placeholder="Buat password" /></div>
+            <button class="btn-primary btn-block" onclick="doLogin()">Daftar & Masuk</button>
+            <p style="text-align:center;font-size:.75rem;color:var(--c-muted);margin-top:.8rem;">Daftar sebagai pengajar? <a href="admin.html" style="color:var(--c-dark);font-weight:600;">Klik di sini →</a></p>
+          </div>
         </div>
       </div>
     </div>
@@ -439,21 +396,27 @@
   <script>
     const authModal = new bootstrap.Modal(document.getElementById('modalAuth'));
 
-    document.getElementById('btnMasuk').addEventListener('click', () => authModal.show());
-    document.getElementById('btnDaftar').addEventListener('click', () => authModal.show());
-    document.getElementById('btnCtaDaftar').addEventListener('click', () => authModal.show());
-
-    function selectRole(el) {
-      document.querySelectorAll('.role-opt').forEach(c => c.classList.remove('selected'));
-      el.classList.add('selected');
+    function checkLogin() {
+      if (sessionStorage.getItem('loggedIn')) showDashboard();
     }
-    function showLoginStep() {
-      document.getElementById('stepRole').style.display = 'none';
-      document.getElementById('stepLogin').style.display = 'block';
+    function showDashboard() {
+      const name = sessionStorage.getItem('userName') || 'Kevin K.';
+      document.getElementById('guestPage').style.display = 'none';
+      document.getElementById('dashPage').style.display = 'block';
+      document.getElementById('guestNav').style.display = 'none';
+      document.getElementById('loggedNav').style.display = 'flex';
+      document.getElementById('navName').textContent = name;
+      document.getElementById('navAvatar').textContent = name.charAt(0).toUpperCase();
+      document.getElementById('dashName').textContent = name.split(' ')[0];
     }
-    function showRoleStep() {
-      document.getElementById('stepLogin').style.display = 'none';
-      document.getElementById('stepRole').style.display = 'block';
+    function doLogin() {
+      sessionStorage.setItem('loggedIn', 'true');
+      sessionStorage.setItem('userName', 'Kevin K.');
+      authModal.hide();
+      showDashboard();
+    }
+    function doLogout() {
+      if (confirm('Keluar dari Mentora?')) { sessionStorage.clear(); location.reload(); }
     }
     function switchTab(t) {
       const isMasuk = t === 'masuk';
@@ -461,14 +424,15 @@
       document.getElementById('formDaftar').style.display = isMasuk ? 'none' : 'block';
       document.getElementById('tabMasuk').className = isMasuk ? 'active' : '';
       document.getElementById('tabDaftar').className = !isMasuk ? 'active' : '';
+      document.getElementById('modalTitle').textContent = isMasuk ? 'Masuk ke Mentora' : 'Daftar ke Mentora';
     }
-    function doLogin() {
-      // Prototype: langsung set session & redirect ke paket
-      sessionStorage.setItem('loggedIn', 'true');
-      sessionStorage.setItem('userName', 'Kevin K.');
-      authModal.hide();
-      window.location.href = 'paket.html';
-    }
+    document.getElementById('btnMasuk').addEventListener('click', () => authModal.show());
+    document.getElementById('btnDaftar').addEventListener('click', () => authModal.show());
+    document.getElementById('btnCtaDaftar').addEventListener('click', () => authModal.show());
+    document.querySelectorAll('.mf-tab').forEach(btn => {
+      btn.addEventListener('click', () => { document.querySelectorAll('.mf-tab').forEach(b => b.classList.remove('active')); btn.classList.add('active'); });
+    });
+    checkLogin();
   </script>
 </body>
 </html>

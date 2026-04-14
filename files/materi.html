@@ -7,8 +7,27 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="mentora.css" />
   <style>
-    /* App-shell layout — body no scroll, handled by mentora.css */
-    html, body { height: 100%; overflow: hidden; }
+    /* Full-height layout — navbar fixed, sidebar+main locked to viewport, no page scroll */
+    html, body { height: 100%; overflow: hidden; background: var(--c-bg); }
+
+    /* Override mentora.css padding-top so there's no dead gap below navbar */
+    .page-with-sidebar {
+      position: fixed !important;
+      top: var(--navbar-h) !important;
+      left: 0; right: 0; bottom: 0;
+      display: flex !important;
+      overflow: hidden;
+      padding-top: 0 !important;
+      min-height: unset !important;
+    }
+
+    /* ─── SIDEBAR ─── */
+    .m-sidebar {
+      padding: 0;
+      height: 100%;
+      overflow-y: auto;
+      flex-shrink: 0;
+    }
 
     .sidebar-top {
       background: linear-gradient(135deg, var(--c-darkest), var(--c-dark));
@@ -30,10 +49,15 @@
       border-radius: 3px; width: 80%;
     }
 
-    /* m-main needs flex column for tabs + scrollable content */
+    /* ─── MAIN CONTENT AREA ─── */
     .m-main {
+      padding: 0;
       display: flex;
       flex-direction: column;
+      flex: 1;
+      height: 100%;
+      overflow-y: auto;
+      min-width: 0;
     }
 
     /* ─── TAB BAR ─── */
@@ -58,8 +82,8 @@
     .content-tab.active { color: var(--c-dark); border-bottom-color: var(--c-dark); }
 
     /* ─── VIEW PANELS ─── */
-    .view-panel { display: none; flex: 1; }
-    .view-panel.active { display: flex; flex-direction: column; flex: 1; }
+    .view-panel { display: none; }
+    .view-panel.active { display: block; }
 
     /* ─── VIDEO PLAYER ─── */
     .video-section { background: #1a2433; }
@@ -144,6 +168,41 @@
       font-size: 0.85rem; color: var(--c-text);
       line-height: 1.7; margin: 0;
     }
+
+    /* ─── TTS PLAYER ─── */
+    .tts-bar {
+      display: flex; align-items: center; gap: 0.75rem;
+      background: linear-gradient(135deg, var(--c-darkest), var(--c-dark));
+      border-radius: var(--radius); padding: 0.9rem 1.2rem;
+      margin-bottom: 1rem; flex-wrap: wrap;
+    }
+    .tts-label { font-size: 0.78rem; font-weight: 700; color: var(--c-lightest); white-space: nowrap; }
+    .tts-btn {
+      background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 20px; color: #fff; padding: 0.35rem 0.9rem;
+      font-family: 'Poppins', sans-serif; font-size: 0.78rem; font-weight: 600;
+      cursor: pointer; transition: var(--transition); white-space: nowrap;
+    }
+    .tts-btn:hover { background: rgba(255,255,255,0.25); }
+    .tts-btn.playing { background: var(--c-lightest); color: var(--c-darkest); border-color: var(--c-lightest); }
+    .tts-progress-wrap { flex: 1; min-width: 120px; }
+    .tts-track { height: 4px; background: rgba(255,255,255,0.2); border-radius: 2px; cursor: pointer; }
+    .tts-fill { height: 100%; background: var(--c-lightest); border-radius: 2px; width: 0%; }
+    .tts-time { font-size: 0.72rem; color: rgba(255,255,255,0.7); white-space: nowrap; }
+    select.tts-speed {
+      background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 12px; color: #fff; padding: 0.3rem 0.5rem;
+      font-family: 'Poppins', sans-serif; font-size: 0.72rem; font-weight: 700; cursor: pointer;
+    }
+    select.tts-speed option { color: var(--c-text); background: #fff; }
+
+    .transcript-wrap { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 1.2rem; margin-bottom: 1rem; }
+    .transcript-wrap h6 { font-weight: 700; font-size: 0.85rem; color: var(--c-darkest); margin-bottom: 0.7rem; display: flex; align-items: center; gap: 0.4rem; }
+    .transcript-text { font-size: 0.87rem; color: var(--c-text); line-height: 2; }
+    .w { cursor: pointer; border-radius: 3px; padding: 1px 2px; display: inline; transition: background 0.1s; }
+    .w:hover { background: rgba(89,165,216,0.15); }
+    .w.spoken { background: rgba(145,229,246,0.3); }
+    .w.current { background: var(--c-lightest); color: var(--c-darkest); font-weight: 700; }
 
     /* ─── MODULE TEST ─── */
     .test-panel { padding: 1.5rem; }
@@ -293,6 +352,50 @@
     }
     .nav-arrows .nav-item-title {
       font-size: 0.88rem; font-weight: 700; color: var(--c-darkest);
+    }
+
+    /* ─── DOWNLOAD / PRINT ─── */
+    .materi-section-wrap {
+      position: relative;
+    }
+    .btn-download, .download-btn {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      background: linear-gradient(135deg, var(--c-dark), var(--c-mid));
+      color: #fff;
+      border: none;
+      border-radius: 20px;
+      padding: 0.3rem 0.85rem;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: var(--transition);
+      z-index: 10;
+      white-space: nowrap;
+    }
+    .btn-download:hover, .download-btn:hover { opacity: 0.85; transform: translateY(-1px); box-shadow: var(--shadow); }
+
+    /* Cards need relative positioning for layout consistency */
+    .rangkuman-card { position: relative; }
+    .transcript-wrap { position: relative; }
+
+    /* Print styles */
+    @media print {
+      .m-navbar, .m-sidebar, .content-tabs, .tts-bar, .video-section,
+      .nav-arrows, .btn-download, .download-btn, .btn-ghost, .btn-primary,
+      #viewTest, #viewLive { display: none !important; }
+      html, body { overflow: visible !important; height: auto !important; }
+      .page-with-sidebar { position: static !important; display: block !important; }
+      .m-main { overflow: visible !important; height: auto !important; }
+      .view-panel.active { display: block !important; }
+      .materi-content { padding: 1rem !important; }
+      .rangkuman-card { break-inside: avoid; border: 1px solid #ccc !important; }
+      .transcript-wrap { break-inside: avoid; }
     }
 
     @media (max-width: 768px) {
@@ -464,25 +567,83 @@
             </div>
           </div>
 
-          <div class="rangkuman-card">
+          <!-- ─── TTS BAR ─── -->
+          <div class="tts-bar">
+            <span class="tts-label">🔊 Dengarkan Transkrip</span>
+            <button class="tts-btn" id="ttsPlayBtn" onclick="ttsToggle()">▶ Putar</button>
+            <button class="tts-btn" onclick="ttsStop()">⏹ Stop</button>
+            <div class="tts-progress-wrap">
+              <div class="tts-track"><div class="tts-fill" id="ttsFill"></div></div>
+            </div>
+            <span class="tts-time" id="ttsTime">0:00</span>
+            <select class="tts-speed" id="ttsSpeed" onchange="ttsSetRate(this.value)">
+              <option value="0.75">0.75×</option>
+              <option value="1" selected>1×</option>
+              <option value="1.25">1.25×</option>
+              <option value="1.5">1.5×</option>
+              <option value="2">2×</option>
+            </select>
+          </div>
+
+          <!-- ─── RANGKUMAN ─── -->
+          <div class="rangkuman-card" id="card-ringkasan">
             <h6>📋 Ringkasan Materi</h6>
             <p>
-              Pada sesi ini kamu akan dikenalkan dengan orientasi belajar di kursus Bahasa Inggris Intensif Mentora. 
+              Pada sesi ini kamu akan dikenalkan dengan orientasi belajar di kursus Bahasa Inggris Intensif Mentora.
               Pelajari cara memaksimalkan fitur platform, jadwal sesi live, dan target capaian setiap modul.
+              Orientasi ini dirancang agar kamu memiliki gambaran jelas tentang perjalanan belajar yang akan ditempuh selama program intensif berlangsung.
             </p>
           </div>
 
-          <div class="rangkuman-card" id="extraContent">
-            <h6>📖 Simple vs Compound Sentences</h6>
+          <!-- ─── TRANSKRIP MATERI LENGKAP ─── -->
+          <div class="transcript-wrap" id="card-transkrip">
+            <h6>📖 Transkrip Materi <span style="font-size:0.72rem;font-weight:500;color:var(--c-muted);"> — klik kata untuk navigasi TTS</span></h6>
+            <div class="transcript-text" id="transcriptEl"></div>
+          </div>
+
+          <!-- ─── KONTEN TAMBAHAN ─── -->
+          <div class="rangkuman-card" id="card-sentences">
+            <h6>📐 Simple vs Compound Sentences</h6>
             <p>
-              <strong>Simple Sentence:</strong> Kalimat yang memiliki satu subjek dan satu predikat. Contoh: "She reads a book."<br><br>
-              <strong>Compound Sentence:</strong> Gabungan dua kalimat sederhana dengan konjungsi (and, but, or, so). Contoh: "She reads a book, and he watches TV."
+              <strong>Simple Sentence (Kalimat Sederhana):</strong> Kalimat yang memiliki satu subjek dan satu predikat utama.
+              Kalimat ini mengungkapkan satu gagasan lengkap dan berdiri sendiri.
+              Contoh: <em>"She reads a book."</em> — Subjek: She, Predikat: reads.<br><br>
+              <strong>Compound Sentence (Kalimat Majemuk):</strong> Gabungan dua atau lebih kalimat sederhana yang dihubungkan oleh konjungsi koordinatif seperti <em>and, but, or, so, for, nor, yet</em>.
+              Setiap bagian bisa berdiri sendiri sebagai kalimat lengkap.
+              Contoh: <em>"She reads a book, and he watches TV."</em> — dua klausa independen dihubungkan oleh <em>and</em>.<br><br>
+              <strong>Perbedaan Utama:</strong> Simple sentence = 1 klausa independen. Compound sentence = 2+ klausa independen yang digabungkan.
             </p>
           </div>
 
-          <!-- Nav arrows -->
-          <div style="display:flex; justify-content:space-between; margin-top:1.5rem; flex-wrap:wrap; gap:0.5rem;">
+          <div class="rangkuman-card" id="card-tenses">
+            <h6>🕐 Tenses dalam Bahasa Inggris</h6>
+            <p>
+              <strong>Present Simple:</strong> Digunakan untuk fakta umum, kebiasaan, dan kebenaran universal.
+              Struktur: Subject + V1 (s/es untuk he/she/it). Contoh: <em>"The sun rises in the east."</em><br><br>
+              <strong>Present Continuous:</strong> Digunakan untuk aksi yang sedang berlangsung saat ini.
+              Struktur: Subject + am/is/are + V-ing. Contoh: <em>"She is reading a book right now."</em><br><br>
+              <strong>Present Perfect:</strong> Digunakan untuk aksi yang sudah selesai tapi relevan dengan sekarang.
+              Struktur: Subject + have/has + V3. Contoh: <em>"I have finished my homework."</em><br><br>
+              <strong>Present Perfect Continuous:</strong> Menekankan durasi aksi yang dimulai di masa lalu dan masih berlangsung.
+              Struktur: Subject + have/has been + V-ing. Contoh: <em>"She has been studying for two hours."</em>
+            </p>
+          </div>
+
+          <div class="rangkuman-card" id="card-tips" style="background:linear-gradient(135deg,rgba(46,204,113,0.05),rgba(39,174,96,0.08));border-color:rgba(46,204,113,0.2);">
+            <h6>✅ Tips Menguasai Grammar</h6>
+            <p>
+              1. <strong>Baca setiap hari</strong> — Bacaan berbahasa Inggris membantu otak mengenali pola kalimat secara alami tanpa harus menghafal aturan.<br><br>
+              2. <strong>Latihan menulis</strong> — Buat 5 kalimat per hari menggunakan struktur yang baru dipelajari. Konsistensi lebih penting dari volume.<br><br>
+              3. <strong>Dengarkan podcast atau audio</strong> — Exposure terhadap bahasa lisan membantu mengintegrasikan grammar ke dalam pemahaman spontan.<br><br>
+              4. <strong>Gunakan flashcard</strong> — Untuk kosakata dan contoh kalimat, spaced repetition terbukti efektif dalam jangka panjang.<br><br>
+              5. <strong>Jangan takut salah</strong> — Kesalahan adalah bagian dari proses belajar. Fokus pada perbaikan bertahap, bukan kesempurnaan instan.
+            </p>
+          </div>
+
+          <!-- Nav -->
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem;flex-wrap:wrap;gap:.5rem;">
             <button class="btn-ghost" onclick="prevMateri()">← Sebelumnya</button>
+            <button class="btn-outline btn-sm" onclick="downloadSubbab()" style="display:inline-flex;align-items:center;gap:0.4rem;">⬇ Download PDF Subbab</button>
             <button class="btn-primary" onclick="nextMateri()">Materi Berikutnya →</button>
           </div>
         </div>
@@ -614,11 +775,52 @@
       // Update active
       document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
       event.currentTarget.classList.add('active');
-      // Update content
+      // Update header
       document.getElementById('videoTitle').textContent = title;
       document.getElementById('breadSection').textContent = section;
       document.getElementById('breadItem').textContent = code + ' ' + title;
       document.getElementById('materiTitle').textContent = title;
+
+      // Load per-subbab content
+      const key = code; // e.g. '1.1.1'
+      const data = MATERI_DATA[key] || MATERI_DATA['default'];
+
+      // Stop TTS if running
+      ttsStop();
+
+      // Update ringkasan
+      document.querySelector('#card-ringkasan p').innerHTML = data.ringkasan;
+
+      // Update extra cards visibility & content
+      const cardSentences = document.getElementById('card-sentences');
+      const cardTenses    = document.getElementById('card-tenses');
+      const cardTips      = document.getElementById('card-tips');
+
+      if (data.sentences) {
+        cardSentences.style.display = '';
+        cardSentences.querySelector('p').innerHTML = data.sentences;
+      } else {
+        cardSentences.style.display = 'none';
+      }
+
+      if (data.tenses) {
+        cardTenses.style.display = '';
+        cardTenses.querySelector('p').innerHTML = data.tenses;
+      } else {
+        cardTenses.style.display = 'none';
+      }
+
+      if (data.tips) {
+        cardTips.style.display = '';
+        cardTips.querySelector('p').innerHTML = data.tips;
+      } else {
+        cardTips.style.display = 'none';
+      }
+
+      // Rebuild transcript
+      currentTranscript = data.transcript;
+      buildTranscript();
+
       // Switch to materi view
       switchView('materi');
     }
@@ -699,6 +901,522 @@
 
     function joinSession() { alert('Membuka sesi live dengan Mr. James...'); }
     function requestSession() { alert('Permintaan chat session terkirim ke teacher!'); }
+
+    // ═══════════════════════════════
+    // TTS ENGINE
+    // ═══════════════════════════════
+    // ─── Per-subbab content data ───
+    const MATERI_DATA = {
+      '1.1.1': {
+        ringkasan: `Pada sesi ini kamu akan dikenalkan dengan orientasi belajar di kursus Bahasa Inggris Intensif Mentora.
+          Pelajari cara memaksimalkan fitur platform, jadwal sesi live, dan target capaian setiap modul.
+          Orientasi ini dirancang agar kamu memiliki gambaran jelas tentang perjalanan belajar yang akan ditempuh selama program intensif berlangsung.`,
+        sentences: null,
+        tenses: null,
+        tips: `1. <strong>Baca setiap hari</strong> — Bacaan berbahasa Inggris membantu otak mengenali pola kalimat secara alami tanpa harus menghafal aturan.<br><br>
+          2. <strong>Manfaatkan fitur TTS</strong> — Dengarkan transkrip berulang kali sambil membaca untuk melatih pendengaran dan pemahaman sekaligus.<br><br>
+          3. <strong>Catat target kamu</strong> — Tulis apa yang ingin kamu capai di akhir program, dan tempelkan di tempat yang sering kamu lihat.<br><br>
+          4. <strong>Aktif di Live Practice</strong> — Jangan hanya menonton; bertanya dan berbicara langsung dengan native teacher jauh lebih efektif.<br><br>
+          5. <strong>Konsistensi adalah kunci</strong> — 20 menit setiap hari jauh lebih baik daripada 3 jam sekali seminggu.`,
+        transcript: `Selamat datang di sesi 1.1.1 — Learning Orientation. Saya sangat senang kamu memutuskan untuk bergabung dengan program Bahasa Inggris Intensif Mentora. Sebelum kita masuk ke materi pertama, ada baiknya kita kenali dulu bagaimana cara terbaik menggunakan platform ini agar perjalanan belajarmu berjalan efektif dan menyenangkan.
+
+Orientasi ini dirancang khusus untuk memberimu gambaran menyeluruh tentang apa yang akan kamu pelajari, bagaimana cara belajar yang paling efisien di Mentora, dan apa saja target yang ingin kita capai bersama selama program berlangsung.
+
+Pertama, mari kita kenali struktur kursus ini. Program Bahasa Inggris Intensif Mentora dibagi menjadi tiga modul besar. Modul pertama adalah Introduction, modul yang sedang kamu jalani sekarang. Di sini kamu akan membangun fondasi yang kuat mulai dari kosakata dasar, pengucapan yang benar, hingga pemahaman grammar awal. Modul kedua adalah Intermediate, yang akan membawamu lebih dalam ke berbagai jenis teks, tenses, dan struktur kalimat yang lebih kompleks. Dan modul ketiga adalah Advanced, yang dirancang untuk mengasah kemampuan komunikasi aktifmu melalui writing dan speaking yang lebih ekspresif.
+
+Kedua, kenali fitur-fitur platform yang tersedia. Setiap subbab memiliki video penjelasan yang bisa kamu tonton kapan saja dan sebanyak yang kamu mau. Di bawah video, tersedia transkrip lengkap yang bisa kamu dengarkan ulang dengan fitur TTS, atau Text-to-Speech. Kamu juga bisa mengklik kata mana saja di dalam transkrip untuk langsung melompat ke bagian itu. Setelah menyelesaikan setiap modul, kamu akan menghadapi Module Test untuk mengukur sejauh mana pemahamanmu. Dan jangan lupa, ada sesi Live Practice bersama native teacher yang bisa kamu ikuti secara langsung.
+
+Ketiga, mari kita bicarakan tentang cara belajar yang efektif. Konsistensi jauh lebih penting daripada intensitas sesekali. Lebih baik belajar dua puluh menit setiap hari daripada belajar tiga jam sekali seminggu. Otak kita menyimpan informasi lebih baik ketika terpapar secara berulang dalam interval waktu yang teratur. Prinsip ini dikenal sebagai spaced repetition, dan Mentora sudah merancang urutan materi berdasarkan prinsip ini.
+
+Selain itu, jangan ragu untuk memanfaatkan fitur replay dan transkrip. Jika ada bagian yang belum kamu pahami, tonton ulang videonya, baca transkripnya, atau dengarkan ulang dengan TTS. Tidak ada yang menghakimi kamu di sini. Semakin sering kamu mengulang, semakin kuat ingatan dan pemahamanmu.
+
+Yang terakhir, ingat bahwa tujuan utama belajar bahasa Inggris bukan sekadar lulus tes, tetapi bisa berkomunikasi dengan percaya diri. Jadi nikmati prosesnya, aktif di sesi Live Practice, dan jangan takut membuat kesalahan. Kesalahan adalah bagian alami dari proses belajar.
+
+Selamat memulai perjalananmu di Mentora. Sampai jumpa di materi berikutnya, yaitu 1.1.2 Vocabulary Basics!`
+      },
+
+      '1.1.2': {
+        ringkasan: `Pada sesi ini kamu akan mempelajari kosakata dasar Bahasa Inggris yang paling sering digunakan dalam kehidupan sehari-hari.
+          Vocabulary yang kuat adalah fondasi dari semua keterampilan bahasa, termasuk reading, listening, speaking, dan writing.
+          Kita akan membahas strategi menghafal kosakata secara efektif menggunakan teknik asosiasi dan konteks kalimat.`,
+        sentences: null,
+        tenses: null,
+        tips: `1. <strong>Belajar dalam konteks</strong> — Jangan hafal kata sendirian. Pelajari kata dalam kalimat lengkap agar lebih mudah diingat dan dipahami penggunaannya.<br><br>
+          2. <strong>Gunakan spaced repetition</strong> — Ulangi kosakata baru di hari ke-1, ke-3, ke-7, dan ke-14 untuk memindahkannya ke memori jangka panjang.<br><br>
+          3. <strong>Buat flashcard</strong> — Tulis kata di satu sisi dan artinya beserta contoh kalimat di sisi lain. Aplikasi seperti Anki sangat membantu.<br><br>
+          4. <strong>Kelompokkan berdasarkan tema</strong> — Pelajari kosakata dalam kelompok tematik (misalnya: kata kerja sehari-hari, kata sifat emosi) agar lebih mudah diingat.<br><br>
+          5. <strong>Gunakan kata baru setiap hari</strong> — Setiap hari coba masukkan satu kata baru ke dalam percakapan atau tulisanmu.`,
+        transcript: `Selamat datang di sesi 1.1.2 — Vocabulary Basics. Di sesi ini kita akan membahas kosakata dasar yang menjadi fondasi kemampuan Bahasa Inggrismu. Tanpa kosakata yang cukup, kamu tidak bisa memahami apa yang kamu baca, dengar, atau katakan. Jadi ini adalah investasi paling penting yang bisa kamu lakukan di awal perjalananmu.
+
+Pertama, mari kita pahami konsep core vocabulary, atau kosakata inti. Ada sekitar tiga ribu kata dalam Bahasa Inggris yang mencakup lebih dari sembilan puluh persen percakapan dan tulisan sehari-hari. Jika kamu menguasai tiga ribu kata ini, kamu sudah bisa berkomunikasi di sebagian besar situasi. Ini kabar yang sangat baik karena artinya kamu tidak perlu menghafal seluruh kamus.
+
+Kedua, mari kita bicara tentang cara paling efektif untuk mempelajari kosakata baru. Jangan pernah belajar kata dalam isolasi. Selalu pelajari kata dalam konteks kalimat yang lengkap. Misalnya, jangan hanya hafal bahwa "ambitious" artinya ambisius. Pelajari kalimat seperti "She is an ambitious student who works hard every day." Dengan begitu, kamu memahami cara penggunaan kata tersebut, bukan hanya artinya.
+
+Teknik kedua adalah pengelompokan tematik. Pelajari kata-kata yang berkaitan dalam satu tema secara bersamaan. Misalnya, kamu bisa mempelajari kata-kata yang berhubungan dengan pekerjaan: employee, employer, workplace, salary, promotion, resignation. Atau kata-kata yang berhubungan dengan perasaan: happy, sad, anxious, excited, frustrated, content. Pengelompokan seperti ini membuat otak lebih mudah membentuk koneksi antar kata.
+
+Teknik ketiga adalah spaced repetition, atau pengulangan berjeda. Penelitian menunjukkan bahwa kita mengingat informasi lebih baik jika kita mengulangnya dalam interval yang semakin panjang. Ulangi kosakata baru di hari pertama, lalu tiga hari kemudian, lalu seminggu kemudian, dan seterusnya. Aplikasi seperti Anki atau Quizlet dirancang khusus berdasarkan prinsip ini.
+
+Selain itu, penting untuk memahami word families, atau keluarga kata. Dalam Bahasa Inggris, banyak kata berasal dari akar yang sama dan bisa berubah bentuk tergantung fungsinya dalam kalimat. Misalnya, dari kata dasar "success" kita mendapat: successful (adjective), successfully (adverb), succeed (verb), dan unsuccessful (negative). Dengan memahami satu akar kata, kamu sebenarnya belajar empat kata sekaligus.
+
+Di akhir sesi ini, saya ingin kamu mencoba latihan sederhana. Pilih lima kata baru yang kamu pelajari hari ini. Buat satu kalimat untuk masing-masing kata. Kemudian ucapkan kalimat-kalimat itu dengan keras setidaknya tiga kali. Latihan kecil ini, jika dilakukan setiap hari, akan memberikan hasil yang luar biasa dalam waktu beberapa bulan.
+
+Sampai jumpa di sesi berikutnya, yaitu 1.1.3 Pronunciation!`
+      },
+
+      '1.1.3': {
+        ringkasan: `Sesi ini membahas pengucapan Bahasa Inggris yang benar, mulai dari fonem dasar hingga intonasi dan ritme kalimat.
+          Pengucapan yang baik sangat penting agar kamu bisa dipahami dengan jelas oleh penutur asli maupun non-penutur asli.
+          Kita akan berlatih dengan teknik shadowing dan minimal pairs untuk mempertajam kepekaan pendengaranmu.`,
+        sentences: null,
+        tenses: null,
+        tips: `1. <strong>Latihan shadowing</strong> — Dengarkan penutur asli, lalu tirukan persis intonasi, ritme, dan pelafalannya secara bersamaan atau segera setelahnya.<br><br>
+          2. <strong>Rekam dirimu sendiri</strong> — Dengarkan rekaman suaramu dan bandingkan dengan penutur asli. Ini cara paling cepat menemukan area yang perlu diperbaiki.<br><br>
+          3. <strong>Fokus pada minimal pairs</strong> — Latih perbedaan bunyi yang mirip seperti /p/ vs /b/, /s/ vs /z/, dan /ɪ/ vs /iː/ untuk menghindari kesalahpahaman.<br><br>
+          4. <strong>Perhatikan word stress</strong> — Tekanan kata yang salah bisa membuat pendengar bingung. Contoh: "PREsent" (kata benda) vs "preSENT" (kata kerja).<br><br>
+          5. <strong>Belajar fonetik dasar</strong> — Memahami simbol IPA membantu kamu membaca kamus dan memastikan pengucapan yang benar secara mandiri.`,
+        transcript: `Selamat datang di sesi 1.1.3 — Pronunciation. Pengucapan adalah salah satu aspek Bahasa Inggris yang paling sering diabaikan oleh pelajar Indonesia, padahal ini sangat penting untuk komunikasi yang efektif. Di sesi ini, kita akan membahas fondasi pengucapan yang benar agar kamu bisa berbicara dengan percaya diri dan mudah dipahami.
+
+Pertama, kita perlu memahami bahwa Bahasa Inggris memiliki sistem bunyi yang berbeda dari Bahasa Indonesia. Ada bunyi-bunyi dalam Bahasa Inggris yang tidak ada dalam Bahasa Indonesia, dan inilah yang sering menjadi sumber kesulitan. Misalnya, bunyi "th" dalam kata "think" atau "this" — bunyi ini tidak ada dalam Bahasa Indonesia. Untuk mengucapkannya, letakkan ujung lidahmu sedikit di antara gigi atas dan bawah, lalu hembuskan udara.
+
+Kedua, kita perlu berbicara tentang vokal panjang dan pendek. Bahasa Inggris membedakan antara vokal pendek dan panjang, dan perbedaan ini bisa mengubah makna kata secara total. Perhatikan perbedaan antara "ship" dan "sheep" — keduanya terdengar hampir sama, tapi maknanya berbeda. "Ship" menggunakan vokal pendek /ɪ/, sementara "sheep" menggunakan vokal panjang /iː/. Pasangan seperti ini disebut minimal pairs, dan melatihnya adalah cara terbaik untuk mempertajam telinga dan lidahmu.
+
+Ketiga, intonasi sangat penting dalam Bahasa Inggris. Intonasi adalah naik-turunnya suara saat kita berbicara. Dalam Bahasa Inggris, pertanyaan ya/tidak biasanya menggunakan intonasi naik di akhir kalimat, sementara pernyataan menggunakan intonasi turun. Contoh: "You're coming?" dengan intonasi naik berarti kamu bertanya. "You're coming." dengan intonasi turun berarti kamu menyatakan fakta.
+
+Teknik yang paling direkomendasikan untuk meningkatkan pengucapan adalah shadowing. Pilih rekaman audio dari penutur asli, misalnya podcast atau video YouTube. Dengarkan satu kalimat, lalu tirukan persis bagaimana kalimat itu diucapkan, termasuk ritme, intonasi, dan kecepatan bicaranya. Lakukan ini berulang kali sampai kamu bisa menirunya dengan lancar.
+
+Ingat, tidak ada yang namanya aksen yang sempurna. Yang terpenting adalah kamu bisa dipahami dengan jelas. Fokuslah pada kejelasan pengucapan, bukan pada menirukan aksen tertentu. Dengan latihan konsisten, pengucapanmu akan semakin membaik dari waktu ke waktu.
+
+Sampai jumpa di modul berikutnya — 1.2 Text Types!`
+      },
+
+      '1.2.1': {
+        ringkasan: `Descriptive Text adalah jenis teks yang menggambarkan suatu objek, tempat, orang, atau fenomena secara detail dan hidup.
+          Tujuannya adalah menciptakan gambaran yang jelas di benak pembaca menggunakan bahasa yang deskriptif dan sensoris.
+          Kita akan mempelajari struktur, ciri kebahasaan, dan cara menulis descriptive text yang efektif.`,
+        sentences: `<strong>Struktur Descriptive Text:</strong><br><br>
+          <strong>1. Identification:</strong> Bagian pembuka yang memperkenalkan objek yang akan dideskripsikan. Siapa atau apa yang akan dijelaskan?
+          Contoh: <em>"Bali is a beautiful island located in Indonesia, known worldwide for its rich culture and stunning landscapes."</em><br><br>
+          <strong>2. Description:</strong> Bagian utama yang mendeskripsikan fitur-fitur khusus dari objek tersebut secara detail.
+          Contoh: <em>"The island features terraced rice fields, ancient Hindu temples, and pristine beaches with crystal-clear water."</em><br><br>
+          <strong>Ciri Kebahasaan:</strong> Menggunakan Simple Present Tense, adjectives yang kaya (beautiful, stunning, ancient), kalimat deskriptif dengan detail sensoris (penglihatan, pendengaran, penciuman), dan specific noun phrases.`,
+        tenses: null,
+        tips: `1. <strong>Gunakan indra sebagai panduan</strong> — Deskripsikan apa yang bisa dilihat, didengar, dicium, dirasakan, dan dicicipi untuk membuat teks lebih hidup.<br><br>
+          2. <strong>Pilih kata sifat yang spesifik</strong> — Hindari kata sifat umum seperti "good" atau "nice". Gunakan kata yang lebih spesifik seperti "breathtaking", "vibrant", atau "serene".<br><br>
+          3. <strong>Organisasikan deskripsimu</strong> — Deskripsikan dari umum ke khusus, atau dari atas ke bawah, atau dari luar ke dalam agar pembaca mudah mengikuti.<br><br>
+          4. <strong>Gunakan figurative language</strong> — Simile ("as blue as the ocean") dan metafora ("the city is a jungle") membuat deskripsi lebih menarik.<br><br>
+          5. <strong>Tunjukkan, jangan ceritakan</strong> — Daripada menulis "The room was messy", tulis "Clothes were piled on the floor, books were scattered across the desk, and empty cups littered every surface."`,
+        transcript: `Selamat datang di sesi 1.2.1 — Descriptive Text. Di sesi ini kita akan mempelajari salah satu jenis teks yang paling fundamental dalam Bahasa Inggris, yaitu descriptive text atau teks deskriptif. Kemampuan mendeskripsikan sesuatu dengan baik adalah dasar dari banyak jenis tulisan dan komunikasi lisan lainnya.
+
+Descriptive text adalah teks yang bertujuan untuk menggambarkan suatu objek, orang, tempat, hewan, atau fenomena secara detail sehingga pembaca seolah-olah bisa melihat, merasakan, atau mengalami sendiri apa yang dideskripsikan. Kata kuncinya adalah "menggambarkan" dan "detail".
+
+Struktur descriptive text terdiri dari dua bagian utama. Bagian pertama adalah identification atau pengenalan, yaitu kalimat atau paragraf pembuka yang memperkenalkan apa yang akan dideskripsikan. Bagian kedua adalah description, yaitu uraian panjang tentang ciri-ciri khusus objek tersebut. Deskripsi bisa meliputi penampilan fisik, karakteristik, perilaku, atau aspek lain yang relevan.
+
+Salah satu kunci menulis descriptive text yang baik adalah penggunaan bahasa sensoris. Bahasa sensoris adalah bahasa yang merangsang kelima indra pembaca: penglihatan, pendengaran, penciuman, perasa, dan peraba. Misalnya, daripada menulis "The market was busy," kamu bisa menulis "The market buzzed with vendors calling out prices, the air thick with the smell of spices and grilled meat, while the sun cast long golden shadows between the stalls."
+
+Ciri kebahasaan descriptive text dalam Bahasa Inggris meliputi penggunaan Simple Present Tense untuk mendeskripsikan fakta yang berlaku umum, adjectives atau kata sifat yang kaya dan spesifik, serta noun phrases yang detail. Hindari kata sifat yang terlalu umum seperti "good" atau "nice". Pilihlah kata yang lebih spesifik dan ekspresif.
+
+Prinsip terpenting dalam descriptive writing adalah "show, don't tell" atau "tunjukkan, jangan sekadar ceritakan". Daripada menulis "She was nervous," lebih baik tulis "Her hands trembled slightly as she straightened her notes, and she took three deep breaths before stepping onto the stage." Kalimat kedua jauh lebih hidup dan menarik karena pembaca bisa merasakan kegugupannya secara langsung.
+
+Mari kita praktikkan bersama. Bayangkan kamu ingin mendeskripsikan rumahmu. Mulailah dengan identification: di mana rumah itu berada, apa yang membuatnya unik. Kemudian deskripsikan bagian-bagiannya satu per satu: halaman depan, ruang tamu, dapur. Gunakan adjectives yang spesifik dan bahasa sensoris untuk setiap bagian.
+
+Sampai jumpa di sesi berikutnya, yaitu 1.2.2 Narrative Text!`
+      },
+
+      '1.2.2': {
+        ringkasan: `Narrative Text adalah teks yang menceritakan sebuah kisah, baik nyata maupun fiktif, dengan tujuan menghibur atau memberikan pesan moral kepada pembaca.
+          Struktur narrative text mengikuti alur yang jelas: orientation, complication, resolution, dan reorientation.
+          Di sesi ini kita akan belajar cara membangun plot yang menarik dan menggunakan literary devices untuk memperkuat cerita.`,
+        sentences: `<strong>Struktur Narrative Text:</strong><br><br>
+          <strong>1. Orientation:</strong> Pengenalan tokoh, latar tempat, dan waktu. Menjawab pertanyaan: siapa, di mana, dan kapan?
+          Contoh: <em>"Once upon a time, a young girl named Mia lived in a small coastal village where fishing was the only livelihood."</em><br><br>
+          <strong>2. Complication:</strong> Masalah atau konflik yang muncul dan mendorong cerita maju. Ini adalah inti dari narrative.
+          Contoh: <em>"One stormy night, her father's boat disappeared at sea, leaving the family in desperate poverty."</em><br><br>
+          <strong>3. Resolution:</strong> Cara konflik diselesaikan, bisa berakhir bahagia, sedih, atau mengambang.<br><br>
+          <strong>4. Reorientation (opsional):</strong> Komentar akhir atau refleksi penulis tentang kejadian dalam cerita.`,
+        tenses: null,
+        tips: `1. <strong>Buat konflik yang menarik</strong> — Cerita yang baik selalu bergantung pada konflik yang kuat. Konflik bisa berupa orang vs orang, orang vs alam, atau orang vs dirinya sendiri.<br><br>
+          2. <strong>Kembangkan karakter</strong> — Tokoh yang terasa nyata dan memiliki kedalaman emosi membuat pembaca lebih terlibat dalam cerita.<br><br>
+          3. <strong>Gunakan Past Tense</strong> — Narrative text umumnya menggunakan Simple Past Tense dan Past Continuous Tense untuk menceritakan kejadian.<br><br>
+          4. <strong>Variasikan panjang kalimat</strong> — Kalimat pendek menciptakan ketegangan; kalimat panjang membangun suasana. Kombinasi keduanya membuat cerita lebih dinamis.<br><br>
+          5. <strong>Akhiri dengan berkesan</strong> — Resolution yang memuaskan atau twist yang tidak terduga membuat pembaca mengingat ceritamu lebih lama.`,
+        transcript: `Selamat datang di sesi 1.2.2 — Narrative Text. Di sesi ini kita akan mempelajari salah satu jenis teks yang paling banyak ditemukan dalam kehidupan sehari-hari, yaitu teks naratif. Dari dongeng anak-anak hingga novel tebal, dari film hingga obrolan santai, narasi ada di mana-mana.
+
+Narrative text atau teks naratif adalah teks yang bertujuan untuk menceritakan sebuah kejadian atau rangkaian kejadian, baik nyata maupun fiktif. Tujuan utamanya adalah menghibur pembaca, meskipun seringkali juga menyisipkan pesan moral atau refleksi tentang kehidupan.
+
+Struktur narrative text terdiri dari empat bagian utama. Pertama adalah orientation atau orientasi, yang berfungsi untuk memperkenalkan latar belakang cerita: siapa tokohnya, di mana cerita berlangsung, dan kapan kejadian ini terjadi. Orientasi yang baik langsung menarik perhatian pembaca dan membuat mereka ingin melanjutkan membaca.
+
+Bagian kedua adalah complication atau komplikasi. Ini adalah jantung dari setiap cerita. Komplikasi adalah masalah atau konflik yang muncul dan mengguncang keseimbangan awal. Tanpa komplikasi, tidak ada cerita. Komplikasi bisa berupa konflik eksternal seperti bencana alam atau pertentangan antar tokoh, atau konflik internal seperti keraguan dan dilema moral yang dialami tokoh utama.
+
+Bagian ketiga adalah resolution atau resolusi, yaitu bagaimana konflik tersebut diselesaikan. Resolusi tidak harus berakhir bahagia — cerita yang realistis seringkali memiliki akhir yang ambigu atau bahkan menyedihkan. Yang terpenting adalah resolusi terasa konsisten dengan karakter dan alur cerita yang telah dibangun.
+
+Bagian keempat adalah reorientation, yang bersifat opsional. Ini adalah komentar akhir penulis, bisa berupa refleksi, pesan moral, atau gambaran tentang kehidupan tokoh setelah konflik selesai.
+
+Dari segi bahasa, narrative text umumnya menggunakan Past Tense karena menceritakan kejadian yang telah berlalu. Simple Past Tense digunakan untuk aksi utama, sementara Past Continuous Tense digunakan untuk menggambarkan latar suasana atau aksi yang sedang berlangsung ketika aksi lain terjadi.
+
+Kunci dari narrative yang baik adalah karakter yang hidup dan konflik yang relevan. Pembaca perlu peduli pada nasib tokoh utama. Untuk mencapai ini, tunjukkan kepribadian tokoh melalui tindakan dan dialog, bukan sekadar deskripsi langsung.
+
+Sampai jumpa di modul berikutnya — 1.3 Grammar!`
+      },
+
+      '1.3.1': {
+        ringkasan: `Sesi ini memberikan gambaran menyeluruh tentang sistem tenses dalam Bahasa Inggris.
+          Memahami tenses adalah kunci untuk mengekspresikan waktu dan aspek dengan tepat dalam kalimat Bahasa Inggris.
+          Kita akan mempelajari empat kelompok utama tenses: Present, Past, Future, dan Perfect tenses beserta penggunaannya.`,
+        sentences: null,
+        tenses: `<strong>Present Simple:</strong> Digunakan untuk fakta umum, kebiasaan, dan kebenaran universal.
+          Struktur: Subject + V1 (s/es untuk he/she/it). Contoh: <em>"The sun rises in the east."</em><br><br>
+          <strong>Present Continuous:</strong> Digunakan untuk aksi yang sedang berlangsung saat ini.
+          Struktur: Subject + am/is/are + V-ing. Contoh: <em>"She is reading a book right now."</em><br><br>
+          <strong>Present Perfect:</strong> Digunakan untuk aksi yang sudah selesai tapi relevan dengan sekarang.
+          Struktur: Subject + have/has + V3. Contoh: <em>"I have finished my homework."</em><br><br>
+          <strong>Present Perfect Continuous:</strong> Menekankan durasi aksi yang dimulai di masa lalu dan masih berlangsung.
+          Struktur: Subject + have/has been + V-ing. Contoh: <em>"She has been studying for two hours."</em><br><br>
+          <strong>Past Simple:</strong> Untuk aksi yang terjadi dan selesai di masa lalu pada waktu yang spesifik.
+          Struktur: Subject + V2. Contoh: <em>"He visited Paris last year."</em><br><br>
+          <strong>Future Simple:</strong> Untuk rencana atau prediksi di masa depan.
+          Struktur: Subject + will + V1. Contoh: <em>"They will arrive tomorrow."</em>`,
+        tips: `1. <strong>Pelajari signal words</strong> — Setiap tense memiliki kata kunci: "always/every" (Present Simple), "now/at the moment" (Present Continuous), "already/just/yet" (Present Perfect).<br><br>
+          2. <strong>Fokus dulu pada Present dan Past</strong> — Kuasai Present Simple, Past Simple, dan Present Perfect terlebih dahulu sebelum beralih ke tenses yang lebih kompleks.<br><br>
+          3. <strong>Buat kalimat sendiri</strong> — Untuk setiap tense, buat minimal 5 kalimat tentang hidupmu sendiri agar konteksnya terasa nyata.<br><br>
+          4. <strong>Perhatikan irregular verbs</strong> — Hafalkan daftar kata kerja tidak beraturan seperti go-went-gone, eat-ate-eaten karena ini sangat sering muncul.<br><br>
+          5. <strong>Pahami aspek, bukan hanya waktu</strong> — Tenses bukan hanya tentang kapan, tapi juga tentang apakah aksi selesai, sedang berlangsung, atau relevan dengan sekarang.`,
+        transcript: `Selamat datang di sesi 1.3.1 — Tenses Overview. Tenses adalah salah satu aspek grammar Bahasa Inggris yang paling penting sekaligus yang paling sering membingungkan pelajar Indonesia. Hari ini kita akan membangun pemahaman yang komprehensif dan sistematis tentang tenses agar kamu tidak lagi bingung kapan harus menggunakan tense yang mana.
+
+Pertama, mari kita luruskan kesalahpahaman yang paling umum. Banyak pelajar mengira bahwa tenses hanya tentang waktu: sekarang, kemarin, atau besok. Padahal, tenses dalam Bahasa Inggris sebenarnya mengekspresikan dua hal sekaligus: waktu dan aspek. Waktu adalah kapan aksi terjadi, sedangkan aspek menggambarkan bagaimana aksi itu berlangsung, apakah sudah selesai, sedang berlangsung, atau hasilnya masih relevan sampai sekarang.
+
+Sistem tenses dalam Bahasa Inggris bisa dibagi menjadi empat kelompok besar berdasarkan waktu: Present, Past, Future, dan Future Perfect. Masing-masing kelompok kemudian dibagi lagi berdasarkan aspek menjadi Simple, Continuous, Perfect, dan Perfect Continuous. Jadi secara total ada enam belas kombinasi, tapi tenang, kamu tidak perlu menghafal semuanya sekaligus.
+
+Mari kita mulai dengan Present Simple. Tense ini digunakan untuk fakta umum, kebiasaan, dan kebenaran yang selalu berlaku. Strukturnya adalah Subject diikuti kata kerja bentuk pertama, dengan tambahan s atau es untuk subject orang ketiga tunggal. Contoh: "The Earth revolves around the Sun." Atau "She drinks coffee every morning."
+
+Selanjutnya, Present Continuous digunakan untuk aksi yang sedang terjadi saat kamu berbicara. Strukturnya adalah Subject diikuti am, is, atau are, kemudian kata kerja bentuk ing. Contoh: "I am studying English right now." Atau "They are having dinner at the moment."
+
+Present Perfect digunakan ketika kamu ingin menghubungkan masa lalu dengan masa sekarang. Aksinya terjadi di masa lalu, tapi hasilnya atau relevansinya masih terasa sekarang. Strukturnya adalah Subject diikuti have atau has, kemudian kata kerja bentuk ketiga. Contoh: "I have visited Bali three times." Ini berarti kamu sudah pernah ke Bali, dan pengalaman itu relevan dengan saat ini.
+
+Past Simple digunakan untuk aksi yang terjadi dan selesai di masa lalu pada waktu yang spesifik. Strukturnya menggunakan kata kerja bentuk kedua. Contoh: "She graduated from university in 2020." Kata kunci yang sering muncul bersama Past Simple adalah: yesterday, last week, last year, ago, in 2020, dan sebagainya.
+
+Pelajaran terpenting yang perlu kamu ingat adalah ini: jangan hanya menghafal aturan tenses. Cobalah merasakan logika di baliknya. Present Perfect "I have eaten" terasa berbeda dari Past Simple "I ate this morning" karena yang pertama masih terasa relevan sekarang, sedangkan yang kedua sudah selesai sepenuhnya.
+
+Sampai jumpa di sesi berikutnya, yaitu 1.3.2 Compound Sentences!`
+      },
+
+      '1.3.2': {
+        ringkasan: `Sesi ini membahas perbedaan antara simple sentence dan compound sentence serta cara menggabungkan kalimat menggunakan coordinating conjunctions.
+          Memahami struktur kalimat majemuk adalah kunci untuk menulis Bahasa Inggris yang lebih variatif dan dewasa.
+          Kita akan berlatih menggunakan FANBOYS (For, And, Nor, But, Or, Yet, So) untuk menghubungkan dua klausa independen.`,
+        sentences: `<strong>Simple Sentence (Kalimat Sederhana):</strong> Kalimat yang memiliki satu subjek dan satu predikat utama.
+          Kalimat ini mengungkapkan satu gagasan lengkap dan berdiri sendiri.
+          Contoh: <em>"She reads a book."</em> — Subjek: She, Predikat: reads.<br><br>
+          <strong>Compound Sentence (Kalimat Majemuk):</strong> Gabungan dua atau lebih kalimat sederhana yang dihubungkan oleh konjungsi koordinatif seperti <em>and, but, or, so, for, nor, yet</em>.
+          Setiap bagian bisa berdiri sendiri sebagai kalimat lengkap.
+          Contoh: <em>"She reads a book, and he watches TV."</em> — dua klausa independen dihubungkan oleh <em>and</em>.<br><br>
+          <strong>FANBOYS — Coordinating Conjunctions:</strong><br>
+          <em>For</em> (karena/sebab) — "I stayed home, for it was raining heavily."<br>
+          <em>And</em> (dan) — "She sings, and he plays guitar."<br>
+          <em>Nor</em> (juga tidak) — "He doesn't smoke, nor does he drink."<br>
+          <em>But</em> (tapi) — "I wanted to go, but I was too tired."<br>
+          <em>Or</em> (atau) — "You can walk, or you can take the bus."<br>
+          <em>Yet</em> (namun) — "She studied hard, yet she failed the exam."<br>
+          <em>So</em> (sehingga) — "It was raining, so we stayed inside."`,
+        tenses: null,
+        tips: `1. <strong>Hafal FANBOYS</strong> — For, And, Nor, But, Or, Yet, So. Ini adalah tujuh coordinating conjunctions yang menghubungkan compound sentence.<br><br>
+          2. <strong>Selalu gunakan koma sebelum conjunction</strong> — Ketika menghubungkan dua independent clause, letakkan koma sebelum FANBOYS. Contoh: "I was hungry, so I made a sandwich."<br><br>
+          3. <strong>Pastikan kedua klausa bisa berdiri sendiri</strong> — Compound sentence harus terdiri dari dua independent clause yang masing-masing memiliki subject dan verb sendiri.<br><br>
+          4. <strong>Variasikan dengan semicolon</strong> — Kamu juga bisa menghubungkan dua independent clause dengan titik koma (;) tanpa conjunction jika kedua klausa sangat berkaitan erat.<br><br>
+          5. <strong>Hindari run-on sentences</strong> — Jangan menggabungkan dua kalimat hanya dengan koma tanpa conjunction. Ini disebut comma splice dan dianggap kesalahan grammar.`,
+        transcript: `Selamat datang di sesi 1.3.2 — Simple vs Compound Sentences. Di sesi ini kita akan belajar tentang dua struktur kalimat dasar dalam Bahasa Inggris: simple sentence dan compound sentence. Memahami perbedaan ini dan cara menggunakannya dengan benar akan membuat tulisan dan bicaramu jauh lebih bervariasi dan natural.
+
+Mari kita mulai dengan simple sentence atau kalimat sederhana. Simple sentence adalah kalimat yang memiliki tepat satu independent clause, yaitu satu subject dan satu predicate yang mengekspresikan satu gagasan lengkap. Contoh sederhana: "The dog barks." Subject-nya adalah "the dog" dan predicate-nya adalah "barks." Meskipun disebut "simple," kalimat ini bisa diperluas dengan menambahkan objek, keterangan waktu, atau keterangan tempat. Misalnya: "The dog barks loudly every morning in the backyard." Ini masih tetap simple sentence karena hanya ada satu independent clause.
+
+Sekarang mari kita bahas compound sentence atau kalimat majemuk. Compound sentence terbentuk ketika kita menggabungkan dua atau lebih independent clause menggunakan coordinating conjunction. Ingat akronim FANBOYS: For, And, Nor, But, Or, Yet, So. Masing-masing conjunction ini membawa makna yang berbeda.
+
+"And" digunakan untuk menambahkan informasi. "She plays piano, and her brother plays violin." "But" digunakan untuk menunjukkan kontras. "I wanted to sleep early, but I couldn't stop watching the series." "Or" digunakan untuk menunjukkan pilihan. "You can take the train, or you can drive." "So" digunakan untuk menunjukkan akibat. "It was getting dark, so we decided to head home."
+
+Ada satu aturan penting yang harus selalu kamu ingat: ketika menggabungkan dua independent clause dengan FANBOYS, selalu letakkan koma sebelum conjunction. "I was tired, but I kept working." Koma ini bukan opsional — ini adalah aturan baku dalam penulisan Bahasa Inggris formal.
+
+Compound sentence sangat berguna untuk menunjukkan hubungan antara dua ide dan untuk membuat teksmu lebih mengalir. Teks yang hanya terdiri dari simple sentences pendek terasa terputus-putus dan kaku. Sebaliknya, mencampurkan simple dan compound sentences menciptakan ritme yang lebih natural dan menyenangkan untuk dibaca.
+
+Ada satu jebakan yang sering dilakukan pelajar: comma splice. Comma splice terjadi ketika kamu menggabungkan dua independent clause hanya dengan koma, tanpa conjunction. Contoh yang salah: "It was raining, we stayed inside." Ini salah. Yang benar: "It was raining, so we stayed inside." Atau kamu bisa gunakan titik koma: "It was raining; we stayed inside."
+
+Sampai jumpa di sesi berikutnya, yaitu 1.3.3 Verbs Deep Dive!`
+      },
+
+      '1.3.3': {
+        ringkasan: `Sesi ini membahas kata kerja secara mendalam, termasuk jenis-jenis verb (action, linking, auxiliary), bentuk-bentuk verb, dan cara penggunaannya yang tepat dalam kalimat.
+          Kata kerja adalah jantung dari setiap kalimat Bahasa Inggris — tanpa verb, tidak ada kalimat.
+          Kita akan mempelajari regular vs irregular verbs, transitive vs intransitive verbs, dan penggunaan modal verbs.`,
+        sentences: null,
+        tenses: `<strong>Jenis-Jenis Verb:</strong><br><br>
+          <strong>Action Verb:</strong> Kata kerja yang menggambarkan aksi fisik atau mental. Contoh: run, think, eat, write, believe.<br><br>
+          <strong>Linking Verb:</strong> Menghubungkan subject dengan subject complement. Contoh: be (am/is/are), seem, appear, become, feel, look, smell, taste, sound.<br><br>
+          <strong>Auxiliary/Helping Verb:</strong> Digunakan bersama main verb untuk membentuk tense, mood, atau voice. Contoh: have, be, do, will, would, can, could, may, might, shall, should, must.<br><br>
+          <strong>Modal Verbs dan fungsinya:</strong><br>
+          <em>Can/Could</em> — kemampuan atau izin: "She can swim fast." / "Could I borrow your pen?"<br>
+          <em>Must/Have to</em> — keharusan: "You must wear a helmet." / "I have to finish this today."<br>
+          <em>Should/Ought to</em> — saran: "You should see a doctor." / "You ought to apologize."<br>
+          <em>May/Might</em> — kemungkinan: "It may rain later." / "She might be late."`,
+        tips: `1. <strong>Hafalkan irregular verbs secara bertahap</strong> — Prioritaskan 50 irregular verbs paling umum (go-went-gone, make-made-made, take-took-taken) sebelum mempelajari yang lebih jarang.<br><br>
+          2. <strong>Pahami transitive vs intransitive</strong> — Transitive verbs membutuhkan objek ("She ate an apple"), sedangkan intransitive tidak ("She smiled"). Kebingungan ini sering menyebabkan kesalahan grammar.<br><br>
+          3. <strong>Kuasai modal verbs</strong> — Can, could, will, would, may, might, must, should, shall adalah modal verbs yang sangat sering dipakai. Pelajari nuansa maknanya.<br><br>
+          4. <strong>Perhatikan subject-verb agreement</strong> — Verb harus selalu sesuai dengan subject-nya. "He runs" (bukan "He run"), "They run" (bukan "They runs").<br><br>
+          5. <strong>Gunakan phrasal verbs</strong> — Bahasa Inggris sangat kaya dengan phrasal verbs seperti "give up", "look forward to", "run into". Pelajari yang paling umum untuk terdengar lebih natural.`,
+        transcript: `Selamat datang di sesi 1.3.3 — Verbs Deep Dive. Kata kerja atau verb adalah komponen paling fundamental dalam setiap kalimat Bahasa Inggris. Tidak ada kalimat yang bisa terbentuk tanpa verb. Di sesi ini kita akan menyelami dunia kata kerja secara mendalam agar kamu benar-benar memahami cara kerjanya.
+
+Mari kita mulai dengan memahami jenis-jenis verb. Jenis pertama adalah action verb, yaitu kata kerja yang menggambarkan aksi, baik fisik maupun mental. Contoh aksi fisik: run, jump, eat, write, drive. Contoh aksi mental: think, believe, understand, imagine, remember. Action verb adalah jenis verb yang paling mudah dikenali karena menggambarkan sesuatu yang "dilakukan."
+
+Jenis kedua adalah linking verb. Linking verb tidak menggambarkan aksi, melainkan menghubungkan subject dengan deskripsi tentang subject tersebut, yang disebut subject complement. Linking verb yang paling umum adalah semua bentuk "be": am, is, are, was, were. Selain itu ada seem, appear, become, feel, look, smell, taste, dan sound. Contoh: "The soup smells delicious." Di sini, "smells" adalah linking verb yang menghubungkan "the soup" dengan "delicious."
+
+Jenis ketiga adalah auxiliary verb atau kata kerja bantu. Auxiliary verb digunakan bersama main verb untuk membentuk berbagai tenses dan moods. Ada dua jenis auxiliary verb: primary auxiliaries yaitu have, be, dan do, serta modal auxiliaries yaitu will, would, can, could, may, might, shall, should, must, dan ought to.
+
+Modal verbs sangat penting dan sering muncul dalam percakapan sehari-hari. Setiap modal membawa nuansa makna yang berbeda. "Can" menyatakan kemampuan: "She can play the piano." "Must" menyatakan keharusan yang kuat: "You must wear a seatbelt." "Should" menyatakan saran: "You should drink more water." "May" dan "might" menyatakan kemungkinan dengan tingkat kepastian yang berbeda.
+
+Sekarang mari kita bahas perbedaan antara regular dan irregular verbs. Regular verbs membentuk Past Tense dan Past Participle dengan menambahkan "-ed" atau "-d". Contoh: walk-walked-walked, love-loved-loved. Irregular verbs tidak mengikuti pola ini dan harus dihafalkan satu per satu. Contoh: go-went-gone, eat-ate-eaten, write-wrote-written.
+
+Ada satu konsep lagi yang sangat penting: subject-verb agreement. Artinya, kata kerja harus selalu sesuai dengan subject-nya dalam hal jumlah dan orang. Untuk subject orang ketiga tunggal dalam Present Simple, tambahkan s atau es. "She walks to school every day." Bukan "She walk." Ini terlihat sederhana, tapi kesalahan subject-verb agreement sangat sering terjadi bahkan pada pelajar tingkat menengah.
+
+Selamat menyelesaikan modul Grammar! Sampai jumpa di modul-modul berikutnya yang akan membawa kemampuan Bahasa Inggrismu ke level berikutnya.`
+      },
+
+      'default': {
+        ringkasan: `Pilih subbab dari sidebar untuk memulai belajar. Setiap subbab memiliki video, transkrip, dan ringkasan materi yang berbeda.`,
+        sentences: null,
+        tenses: null,
+        tips: null,
+        transcript: `Pilih subbab dari menu di sebelah kiri untuk memulai. Setiap subbab memiliki konten dan transkrip yang unik.`
+      }
+    };
+
+    let currentTranscript = MATERI_DATA['1.1.1'].transcript;
+
+    let ttsUtter = null;
+    let ttsPlaying = false;
+    let ttsWords = [];
+    let ttsWordIndex = 0;
+    let ttsTimer = null;
+    let ttsElapsed = 0;
+    let ttsInterval = null;
+
+    function buildTranscript() {
+      const el = document.getElementById('transcriptEl');
+      ttsWords = currentTranscript.split(/(\s+)/);
+      el.innerHTML = ttsWords.map((w,i) =>
+        /\s+/.test(w) ? w : `<span class="w" id="w${i}" onclick="ttsJumpTo(${i})">${w}</span>`
+      ).join('');
+    }
+
+    function ttsToggle() {
+      if ('speechSynthesis' in window) {
+        if (ttsPlaying) { ttsPause(); } else { ttsPlay(); }
+      } else {
+        alert('Browser kamu tidak mendukung Text-to-Speech. Coba Chrome atau Edge.');
+      }
+    }
+
+    function ttsPlay(fromIndex) {
+      window.speechSynthesis.cancel();
+      ttsWordIndex = fromIndex !== undefined ? fromIndex : ttsWordIndex;
+
+      const textFromHere = ttsWords.slice(ttsWordIndex).join('');
+      ttsUtter = new SpeechSynthesisUtterance(textFromHere);
+      ttsUtter.lang = 'id-ID';
+      ttsUtter.rate = parseFloat(document.getElementById('ttsSpeed').value);
+
+      // Highlight word by word using boundary events
+      ttsUtter.onboundary = function(e) {
+        if (e.name !== 'word') return;
+        // Find which word index we're at based on char offset
+        let charCount = 0;
+        let absIndex = ttsWordIndex;
+        for (let i = ttsWordIndex; i < ttsWords.length; i++) {
+          if (charCount >= e.charIndex) { absIndex = i; break; }
+          charCount += ttsWords[i].length;
+        }
+        highlightWord(absIndex);
+      };
+
+      ttsUtter.onend = function() {
+        ttsPlaying = false;
+        document.getElementById('ttsPlayBtn').textContent = '▶ Putar';
+        document.getElementById('ttsPlayBtn').classList.remove('playing');
+        clearInterval(ttsInterval);
+        document.getElementById('ttsFill').style.width = '100%';
+      };
+
+      window.speechSynthesis.speak(ttsUtter);
+      ttsPlaying = true;
+      document.getElementById('ttsPlayBtn').textContent = '⏸ Jeda';
+      document.getElementById('ttsPlayBtn').classList.add('playing');
+
+      // Progress timer
+      clearInterval(ttsInterval);
+      const totalWords = ttsWords.filter(w => !/\s+/.test(w)).length;
+      const rate = parseFloat(document.getElementById('ttsSpeed').value);
+      const estimatedDuration = (currentTranscript.length / 15) / rate; // rough seconds
+      ttsInterval = setInterval(() => {
+        ttsElapsed++;
+        const pct = Math.min((ttsElapsed / estimatedDuration) * 100, 100);
+        document.getElementById('ttsFill').style.width = pct + '%';
+        const m = Math.floor(ttsElapsed / 60), s = ttsElapsed % 60;
+        document.getElementById('ttsTime').textContent = m + ':' + String(s).padStart(2,'0');
+      }, 1000);
+    }
+
+    function ttsPause() {
+      window.speechSynthesis.pause();
+      ttsPlaying = false;
+      clearInterval(ttsInterval);
+      document.getElementById('ttsPlayBtn').textContent = '▶ Lanjut';
+      document.getElementById('ttsPlayBtn').classList.remove('playing');
+    }
+
+    function ttsStop() {
+      window.speechSynthesis.cancel();
+      ttsPlaying = false;
+      ttsElapsed = 0;
+      clearInterval(ttsInterval);
+      document.getElementById('ttsPlayBtn').textContent = '▶ Putar';
+      document.getElementById('ttsPlayBtn').classList.remove('playing');
+      document.getElementById('ttsFill').style.width = '0%';
+      document.getElementById('ttsTime').textContent = '0:00';
+      document.querySelectorAll('.w').forEach(w => w.classList.remove('current','spoken'));
+    }
+
+    function ttsJumpTo(wordIdx) {
+      ttsStop();
+      ttsWordIndex = wordIdx;
+      ttsPlay(wordIdx);
+    }
+
+    function ttsSetRate(val) {
+      if (ttsPlaying) { ttsStop(); ttsPlay(); }
+    }
+
+    function highlightWord(idx) {
+      document.querySelectorAll('.w').forEach(w => { w.classList.remove('current'); w.classList.add('spoken'); });
+      const el = document.getElementById('w' + idx);
+      if (el) {
+        el.classList.remove('spoken');
+        el.classList.add('current');
+        el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+
+    buildTranscript();
+
+    // ═══════════════════════════════
+    // DOWNLOAD SUBBAB AS PDF (via print dialog)
+    // ═══════════════════════════════
+    function downloadSubbab() {
+      printSubbab();
+    }
+
+    function printSubbab() {
+      const title = document.getElementById('materiTitle').textContent;
+      const section = document.getElementById('breadSection').textContent;
+      const breadItem = document.getElementById('breadItem').textContent;
+
+      // Collect all card contents
+      const cardIds = ['card-ringkasan','card-transkrip','card-sentences','card-tenses','card-tips'];
+      let cardsHTML = '';
+      cardIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          // Clone to avoid mutating live DOM
+          const clone = el.cloneNode(true);
+          // Remove any leftover download buttons
+          clone.querySelectorAll('.download-btn, .btn-download').forEach(b => b.remove());
+          cardsHTML += `<div class="card-block">${clone.innerHTML}</div>`;
+        }
+      });
+
+      const win = window.open('', '_blank');
+      win.document.write(`<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <title>Mentora – ${title}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      color: #13293d;
+      background: #fff;
+      padding: 2.5rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .doc-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 1.8rem;
+      border-bottom: 3px solid #84D2F6;
+      padding-bottom: 1rem;
+    }
+    .doc-logo { font-weight: 800; font-size: 1.6rem; color: #133C55; }
+    .doc-meta { text-align: right; font-size: 0.78rem; color: #6c757d; line-height: 1.6; }
+    .doc-title { font-size: 1.3rem; font-weight: 800; color: #133C55; margin-bottom: 0.2rem; }
+    .doc-breadcrumb { font-size: 0.78rem; color: #6c757d; margin-bottom: 1.5rem; }
+    .card-block {
+      border: 1.5px solid #d0e8f5;
+      border-radius: 10px;
+      padding: 1.2rem 1.4rem;
+      margin-bottom: 1.2rem;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+    h6 {
+      font-weight: 700; font-size: 0.95rem; color: #133C55;
+      margin-bottom: 0.7rem;
+      padding-right: 0 !important;
+    }
+    p, .transcript-text {
+      font-size: 0.86rem; line-height: 1.85; color: #13293d;
+    }
+    .w { display: inline; }
+    .badge {
+      display: inline-block; padding: 0.2rem 0.6rem;
+      border-radius: 12px; font-size: 0.72rem; font-weight: 700;
+    }
+    .badge-blue { background: rgba(89,165,216,0.15); color: #386FA4; }
+    .badge-green { background: rgba(46,204,113,0.15); color: #27ae60; }
+    .badge-orange { background: rgba(243,156,18,0.15); color: #e67e22; }
+    .tts-bar, .download-btn, .btn-download { display: none !important; }
+    .doc-footer {
+      margin-top: 2rem; padding-top: 0.8rem;
+      border-top: 1px solid #e0ecf5;
+      font-size: 0.72rem; color: #aaa;
+      text-align: center;
+    }
+    @media print {
+      body { padding: 1rem; }
+      .card-block { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="doc-header">
+    <div class="doc-logo">Mentora</div>
+    <div class="doc-meta">
+      ${section}<br>
+      Dicetak: ${new Date().toLocaleDateString('id-ID', {day:'numeric',month:'long',year:'numeric'})}
+    </div>
+  </div>
+  <div class="doc-title">${breadItem}</div>
+  <div class="doc-breadcrumb">${section} › ${title}</div>
+  ${cardsHTML}
+  <div class="doc-footer">Mentora — Platform Belajar Bahasa Inggris Intensif</div>
+  <script>window.onload = function(){ window.print(); }<\/script>
+</body>
+</html>`);
+      win.document.close();
+    }
+
+    // Ctrl+P / Cmd+P → same print dialog
+    document.addEventListener('keydown', function(e) {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
+        e.preventDefault();
+        printSubbab();
+      }
+    });
   </script>
 </body>
 </html>

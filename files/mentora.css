@@ -168,11 +168,9 @@ a { text-decoration: none; color: inherit; }
 
 /* ─── SIDEBAR LAYOUT ─── */
 .page-with-sidebar {
-  position: fixed;
-  top: var(--navbar-h);
-  left: 0; right: 0; bottom: 0;
   display: flex;
-  overflow: hidden;
+  min-height: 100vh;
+  padding-top: var(--navbar-h);
 }
 
 .m-sidebar {
@@ -180,9 +178,11 @@ a { text-decoration: none; color: inherit; }
   flex-shrink: 0;
   background: var(--c-white);
   border-right: 1.5px solid #e8f4fc;
-  height: 100%;
+  height: calc(100vh - var(--navbar-h));
+  position: sticky;
+  top: var(--navbar-h);
   overflow-y: auto;
-  padding: 0;
+  padding: 1.2rem 0;
 }
 .m-sidebar::-webkit-scrollbar { width: 4px; }
 .m-sidebar::-webkit-scrollbar-thumb { background: var(--c-lightest); border-radius: 2px; }
@@ -268,10 +268,8 @@ a { text-decoration: none; color: inherit; }
 /* ─── MAIN CONTENT ─── */
 .m-main {
   flex: 1;
+  padding: 2rem;
   min-width: 0;
-  height: 100%;
-  overflow-y: auto;
-  padding: 0;
 }
 
 /* ─── BADGE ─── */

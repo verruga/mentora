@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8" />
+  <title>Admin Dashboard — Mentora</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="mentora.css" />
+  <style>
+    html, body { height: 100%; overflow: hidden; }
+
+    /* ─── ADMIN LAYOUT ─── */
+    .admin-wrap {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      display: flex; flex-direction: column;
+    }
+
+    /* Admin Navbar */
+    .admin-navbar {
+      height: var(--navbar-h); background: var(--c-darkest);
+      display: flex; align-items: center; padding: 0 1.5rem; gap: 1rem;
+      flex-shrink: 0; z-index: 100;
+      border-bottom: 2px solid rgba(255,255,255,0.1);
+    }
+    .admin-navbar .brand { font-weight: 800; font-size: 1.2rem; color: #fff; letter-spacing: -0.5px; }
+    .admin-navbar .brand span { color: var(--c-lightest); }
+    .admin-navbar .spacer { flex: 1; }
+    .admin-role-badge { background: rgba(145,229,246,0.2); color: var(--c-lightest); font-size: 0.72rem; font-weight: 700; border-radius: 12px; padding: 0.2rem 0.75rem; border: 1px solid rgba(145,229,246,0.3); }
+    .admin-nav-links { display: flex; gap: 0.25rem; }
+    .admin-nav-links a { font-size: 0.83rem; font-weight: 500; color: rgba(255,255,255,0.65); padding: 0.35rem 0.85rem; border-radius: 16px; text-decoration: none; transition: var(--transition); }
+    .admin-nav-links a:hover, .admin-nav-links a.active { background: rgba(255,255,255,0.12); color: #fff; }
+    .admin-user { display: flex; align-items: center; gap: 0.5rem; font-size: 0.82rem; font-weight: 600; color: rgba(255,255,255,0.85); }
+    .admin-user .avatar { width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, var(--c-mid), var(--c-lightest)); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; color: var(--c-darkest); font-weight: 800; }
+
+    /* Body: sidebar + content */
+    .admin-body { display: flex; flex: 1; overflow: hidden; }
+
+    /* Admin Sidebar */
+    .admin-sidebar {
+      width: 220px; flex-shrink: 0;
+      background: #1a2d3e;
+      overflow-y: auto; padding: 1rem 0;
+    }
+    .as-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: rgba(255,255,255,0.35); padding: 0 1.2rem; margin: 1rem 0 0.4rem; }
+    .as-item { display: flex; align-items: center; gap: 0.7rem; padding: 0.6rem 1.2rem; font-size: 0.83rem; font-weight: 500; color: rgba(255,255,255,0.6); cursor: pointer; transition: var(--transition); border-left: 3px solid transparent; }
+    .as-item:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.9); }
+    .as-item.active { background: rgba(89,165,216,0.15); color: var(--c-lightest); border-left-color: var(--c-mid); font-weight: 600; }
+    .as-item .icon { font-size: 1rem; width: 20px; text-align: center; }
+    .as-badge { margin-left: auto; background: rgba(89,165,216,0.25); color: var(--c-lightest); font-size: 0.65rem; font-weight: 700; border-radius: 10px; padding: 0.1rem 0.5rem; }
+
+    /* Admin Content */
+    .admin-content { flex: 1; overflow-y: auto; background: #f0f4f8; padding: 1.5rem; }
+
+    /* Page header */
+    .admin-page-header { margin-bottom: 1.2rem; }
+    .admin-page-header h2 { font-size: 1.3rem; font-weight: 800; color: var(--c-darkest); margin-bottom: 0.2rem; }
+    .admin-page-header p { font-size: 0.85rem; color: var(--c-muted); }
+
+    /* Stats row */
+    .admin-stat-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+    .asc { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 1.2rem; border-left: 4px solid var(--c-mid); }
+    .asc .asc-num { font-size: 1.8rem; font-weight: 800; color: var(--c-darkest); line-height: 1; }
+    .asc .asc-label { font-size: 0.75rem; color: var(--c-muted); margin-top: 0.2rem; }
+
+    /* Panel */
+    .admin-panel { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; margin-bottom: 1.5rem; }
+    .admin-panel-header { padding: 1rem 1.2rem; border-bottom: 1.5px solid #f0f4f8; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; }
+    .admin-panel-header h5 { font-weight: 700; font-size: 0.95rem; color: var(--c-darkest); margin: 0; }
+    .admin-panel-body { padding: 0; }
+
+    /* Table */
+    .admin-table { width: 100%; border-collapse: collapse; }
+    .admin-table th { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.7px; color: var(--c-muted); padding: 0.75rem 1.2rem; background: #f8fafc; border-bottom: 1.5px solid #eef2f7; text-align: left; }
+    .admin-table td { padding: 0.85rem 1.2rem; font-size: 0.83rem; color: var(--c-text); border-bottom: 1px solid #f0f5fa; vertical-align: middle; }
+    .admin-table tr:last-child td { border-bottom: none; }
+    .admin-table tr:hover td { background: #f8fafc; }
+
+    .td-title { font-weight: 600; color: var(--c-darkest); }
+    .td-tag { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.15rem 0.6rem; border-radius: 10px; font-size: 0.7rem; font-weight: 700; }
+    .tag-materi { background: rgba(89,165,216,0.12); color: var(--c-dark); }
+    .tag-video { background: rgba(231,76,60,0.1); color: #e74c3c; }
+    .tag-latihan { background: rgba(243,156,18,0.1); color: #e67e22; }
+    .tag-live { background: rgba(46,204,113,0.1); color: #27ae60; }
+
+    .pill-status { padding: 0.2rem 0.7rem; border-radius: 12px; font-size: 0.7rem; font-weight: 700; }
+    .pill-published { background: rgba(46,204,113,0.12); color: #27ae60; }
+    .pill-draft { background: rgba(243,156,18,0.12); color: #e67e22; }
+    .pill-archived { background: rgba(108,117,125,0.12); color: var(--c-muted); }
+
+    .action-btns { display: flex; gap: 0.4rem; }
+    .btn-action { padding: 0.25rem 0.7rem; border-radius: 10px; font-size: 0.72rem; font-weight: 600; font-family: 'Poppins', sans-serif; cursor: pointer; border: none; transition: var(--transition); }
+    .btn-edit { background: rgba(56,111,164,0.1); color: var(--c-dark); }
+    .btn-edit:hover { background: rgba(56,111,164,0.2); }
+    .btn-assign { background: rgba(46,204,113,0.1); color: #27ae60; }
+    .btn-assign:hover { background: rgba(46,204,113,0.2); }
+    .btn-delete { background: rgba(231,76,60,0.1); color: #e74c3c; }
+    .btn-delete:hover { background: rgba(231,76,60,0.2); }
+
+    /* Search + filter bar */
+    .filter-bar { display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; }
+    .filter-bar input { border: 1.5px solid #d0e4f5; border-radius: 20px; padding: 0.4rem 1rem; font-family: 'Poppins', sans-serif; font-size: 0.8rem; outline: none; width: 200px; transition: var(--transition); }
+    .filter-bar input:focus { border-color: var(--c-mid); }
+    .filter-bar select { border: 1.5px solid #d0e4f5; border-radius: 20px; padding: 0.4rem 0.9rem; font-family: 'Poppins', sans-serif; font-size: 0.8rem; outline: none; color: var(--c-text); background: #fff; cursor: pointer; }
+    .btn-add { background: linear-gradient(135deg, var(--c-dark), var(--c-mid)); color: #fff; border: none; border-radius: 20px; padding: 0.45rem 1.1rem; font-family: 'Poppins', sans-serif; font-size: 0.82rem; font-weight: 700; cursor: pointer; transition: var(--transition); white-space: nowrap; }
+    .btn-add:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    /* Modal */
+    .modal-content { border-radius: 16px; border: none; box-shadow: var(--shadow-lg); }
+    .modal-header { background: linear-gradient(135deg, var(--c-darkest), var(--c-dark)); border-radius: 16px 16px 0 0; border-bottom: none; padding: 1.2rem 1.5rem; }
+    .modal-header .modal-title { font-weight: 700; color: #fff; font-size: 1rem; }
+    .modal-header .btn-close { filter: invert(1); }
+    .modal-body { padding: 1.5rem; }
+    .form-group { margin-bottom: 1rem; }
+    .form-label-a { font-size: 0.82rem; font-weight: 600; color: var(--c-darkest); display: block; margin-bottom: 0.3rem; }
+    .form-ctrl { width: 100%; border: 1.5px solid #d0e4f5; border-radius: var(--radius-sm); padding: 0.55rem 0.9rem; font-family: 'Poppins', sans-serif; font-size: 0.85rem; outline: none; transition: var(--transition); }
+    .form-ctrl:focus { border-color: var(--c-mid); box-shadow: 0 0 0 3px rgba(89,165,216,0.12); }
+    .form-ctrl select, select.form-ctrl { background: #fff; cursor: pointer; }
+
+    /* Views */
+    .admin-view { display: none; }
+    .admin-view.active { display: block; }
+
+    /* RBAC tab */
+    .rbac-card { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 1.2rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 1rem; border-left: 4px solid var(--c-mid); }
+    .rbac-card .rc-icon { font-size: 2rem; }
+    .rbac-card .rc-title { font-weight: 700; font-size: 0.95rem; color: var(--c-darkest); margin-bottom: 0.2rem; }
+    .rbac-card .rc-desc { font-size: 0.78rem; color: var(--c-muted); }
+    .rbac-card .rc-perms { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.5rem; }
+    .perm-chip { padding: 0.15rem 0.6rem; border-radius: 10px; font-size: 0.68rem; font-weight: 700; background: rgba(89,165,216,0.12); color: var(--c-dark); }
+    .perm-chip.denied { background: rgba(231,76,60,0.08); color: #c0392b; }
+
+    .toggle-perm { width: 36px; height: 20px; border-radius: 10px; border: none; cursor: pointer; transition: var(--transition); position: relative; flex-shrink: 0; }
+    .toggle-perm.on { background: var(--c-mid); }
+    .toggle-perm.off { background: #cdd4da; }
+  </style>
+</head>
+<body>
+<div class="admin-wrap">
+
+  <!-- ADMIN NAVBAR -->
+  <nav class="admin-navbar">
+    <a class="brand" href="index.html">Mentora <span>Admin</span></a>
+    <div class="admin-nav-links">
+      <a href="#" class="active" onclick="switchView('materi',this)">Materi</a>
+      <a href="#" onclick="switchView('paket',this)">Paket</a>
+      <a href="#" onclick="switchView('users',this)">Pengguna</a>
+      <a href="#" onclick="switchView('rbac',this)">RBAC</a>
+    </div>
+    <div class="spacer"></div>
+    <span class="admin-role-badge">👤 Super Admin</span>
+    <div class="admin-user">
+      <div class="avatar">A</div>
+      <span>Admin Mentora</span>
+    </div>
+    <a href="index.html" style="font-size:.78rem;color:rgba(255,255,255,.5);margin-left:.5rem;text-decoration:none;font-weight:500;">← Keluar</a>
+  </nav>
+
+  <div class="admin-body">
+    <!-- SIDEBAR -->
+    <aside class="admin-sidebar">
+      <div class="as-label">Konten</div>
+      <div class="as-item active" onclick="switchViewSide('materi',this)"><span class="icon">📚</span> Daftar Materi <span class="as-badge" id="badgeMateri">12</span></div>
+      <div class="as-item" onclick="switchViewSide('paket',this)"><span class="icon">📦</span> Paket & Kelas <span class="as-badge">4</span></div>
+      <div class="as-item" onclick="switchViewSide('assign',this)"><span class="icon">🔗</span> Assign Materi</div>
+
+      <div class="as-label">Pengguna</div>
+      <div class="as-item" onclick="switchViewSide('users',this)"><span class="icon">👥</span> Semua Pengguna <span class="as-badge">248</span></div>
+      <div class="as-item" onclick="switchViewSide('teachers',this)"><span class="icon">👨‍🏫</span> Pengajar <span class="as-badge">8</span></div>
+
+      <div class="as-label">Sistem</div>
+      <div class="as-item" onclick="switchViewSide('rbac',this)"><span class="icon">🔐</span> Role & Akses</div>
+      <div class="as-item" onclick="switchViewSide('analytics',this)"><span class="icon">📊</span> Analitik</div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <div class="admin-content">
+
+      <!-- ═══ VIEW: MATERI ═══ -->
+      <div class="admin-view active" id="viewMateri">
+        <div class="admin-page-header">
+          <h2>📚 Kelola Materi</h2>
+          <p>Tambah, edit, hapus, dan atur penempatan materi di kelas atau paket.</p>
+        </div>
+
+        <!-- Stats -->
+        <div class="admin-stat-cards">
+          <div class="asc"><div class="asc-num">12</div><div class="asc-label">Total Materi</div></div>
+          <div class="asc" style="border-left-color:#27ae60;"><div class="asc-num">9</div><div class="asc-label">Published</div></div>
+          <div class="asc" style="border-left-color:#e67e22;"><div class="asc-num">2</div><div class="asc-label">Draft</div></div>
+          <div class="asc" style="border-left-color:#e74c3c;"><div class="asc-num">1</div><div class="asc-label">Archived</div></div>
+        </div>
+
+        <div class="admin-panel">
+          <div class="admin-panel-header">
+            <h5>Daftar Materi</h5>
+            <div class="filter-bar">
+              <input type="text" placeholder="🔍 Cari materi..." id="searchMateri" oninput="filterMateri()" />
+              <select onchange="filterMateri()" id="filterType">
+                <option value="">Semua Tipe</option>
+                <option value="Materi">Materi</option>
+                <option value="Video">Video</option>
+                <option value="Latihan">Latihan</option>
+                <option value="Live">Live Practice</option>
+              </select>
+              <select onchange="filterMateri()" id="filterStatus">
+                <option value="">Semua Status</option>
+                <option value="Published">Published</option>
+                <option value="Draft">Draft</option>
+                <option value="Archived">Archived</option>
+              </select>
+              <button class="btn-add" onclick="openModalTambah()">+ Tambah Materi</button>
+            </div>
+          </div>
+          <div class="admin-panel-body">
+            <table class="admin-table" id="materiTable">
+              <thead>
+                <tr>
+                  <th>Judul Materi</th>
+                  <th>Tipe</th>
+                  <th>Paket / Kelas</th>
+                  <th>Modul</th>
+                  <th>Status</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="materiBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ VIEW: PAKET ═══ -->
+      <div class="admin-view" id="viewPaket">
+        <div class="admin-page-header">
+          <h2>📦 Kelola Paket & Kelas</h2>
+          <p>Atur struktur paket langganan dan kelas yang tersedia.</p>
+        </div>
+        <div class="admin-panel">
+          <div class="admin-panel-header">
+            <h5>Daftar Paket</h5>
+            <button class="btn-add" onclick="openModalPaket()">+ Tambah Paket</button>
+          </div>
+          <div class="admin-panel-body">
+            <table class="admin-table">
+              <thead><tr><th>Nama Paket</th><th>Harga</th><th>Jumlah Materi</th><th>Status</th><th>Aksi</th></tr></thead>
+              <tbody>
+                <tr><td class="td-title">Intensif UTBK</td><td>Rp60.000/bulan</td><td>20 materi</td><td><span class="pill-status pill-published">Aktif</span></td><td class="action-btns"><button class="btn-action btn-edit" onclick="editPaket('Intensif UTBK')">✏ Edit</button><button class="btn-action btn-delete" onclick="hapusPaket('Intensif UTBK')">🗑 Hapus</button></td></tr>
+                <tr><td class="td-title">Intensif Bahasa Inggris</td><td>Rp200.000/bulan</td><td>48 materi</td><td><span class="pill-status pill-published">Aktif</span></td><td class="action-btns"><button class="btn-action btn-edit" onclick="editPaket('Intensif Bahasa Inggris')">✏ Edit</button><button class="btn-action btn-delete" onclick="hapusPaket('Intensif Bahasa Inggris')">🗑 Hapus</button></td></tr>
+                <tr><td class="td-title">Paket Lengkap</td><td>Rp300.000/bulan</td><td>75 materi</td><td><span class="pill-status pill-published">Aktif</span></td><td class="action-btns"><button class="btn-action btn-edit" onclick="editPaket('Paket Lengkap')">✏ Edit</button><button class="btn-action btn-delete" onclick="hapusPaket('Paket Lengkap')">🗑 Hapus</button></td></tr>
+                <tr><td class="td-title">Free Trial</td><td>Gratis</td><td>5 materi</td><td><span class="pill-status pill-published">Aktif</span></td><td class="action-btns"><button class="btn-action btn-edit" onclick="editPaket('Free Trial')">✏ Edit</button><button class="btn-action btn-delete" onclick="hapusPaket('Free Trial')">🗑 Hapus</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ VIEW: ASSIGN ═══ -->
+      <div class="admin-view" id="viewAssign">
+        <div class="admin-page-header">
+          <h2>🔗 Assign Materi ke Paket/Kelas</h2>
+          <p>Tentukan materi mana yang tersedia di paket atau kelas mana.</p>
+        </div>
+        <div class="admin-panel">
+          <div class="admin-panel-header">
+            <h5>Mapping Materi → Paket</h5>
+            <button class="btn-add" onclick="openModalAssign()">+ Assign Materi</button>
+          </div>
+          <div class="admin-panel-body">
+            <table class="admin-table">
+              <thead><tr><th>Materi</th><th>Paket</th><th>Modul</th><th>Urutan</th><th>Aksi</th></tr></thead>
+              <tbody id="assignBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ VIEW: USERS ═══ -->
+      <div class="admin-view" id="viewUsers">
+        <div class="admin-page-header">
+          <h2>👥 Kelola Pengguna</h2>
+          <p>Lihat dan kelola semua akun pengguna Mentora.</p>
+        </div>
+        <div class="admin-stat-cards">
+          <div class="asc"><div class="asc-num">248</div><div class="asc-label">Total Pengguna</div></div>
+          <div class="asc" style="border-left-color:#27ae60;"><div class="asc-num">186</div><div class="asc-label">Pengguna Aktif</div></div>
+          <div class="asc" style="border-left-color:var(--c-mid);"><div class="asc-num">8</div><div class="asc-label">Pengajar</div></div>
+          <div class="asc" style="border-left-color:#e67e22;"><div class="asc-num">54</div><div class="asc-label">Free Trial</div></div>
+        </div>
+        <div class="admin-panel">
+          <div class="admin-panel-header"><h5>Daftar Pengguna</h5><button class="btn-add">+ Tambah Pengguna</button></div>
+          <div class="admin-panel-body">
+            <table class="admin-table">
+              <thead><tr><th>Nama</th><th>Email</th><th>Role</th><th>Paket</th><th>Status</th><th>Aksi</th></tr></thead>
+              <tbody>
+                <tr><td class="td-title">Kevin K.</td><td>kevin@gmail.com</td><td><span class="td-tag tag-materi">Pelajar</span></td><td>Free Trial</td><td><span class="pill-status pill-published">Aktif</span></td><td class="action-btns"><button class="btn-action btn-edit">✏ Edit</button><button class="btn-action btn-delete">🗑 Hapus</button></td></tr>
+                <tr><td class="td-title">Sarah M.</td><td>sarah@mentora.id</td><td><span class="td-tag tag-live">Pengajar</span></td><td>—</td><td><span class="pill-status pill-published">Aktif</span></td><td class="action-btns"><button class="btn-action btn-edit">✏ Edit</button><button class="btn-action btn-delete">🗑 Hapus</button></td></tr>
+                <tr><td class="td-title">Budi S.</td><td>budi@gmail.com</td><td><span class="td-tag tag-materi">Pelajar</span></td><td>Intensif Bahasa Inggris</td><td><span class="pill-status pill-published">Aktif</span></td><td class="action-btns"><button class="btn-action btn-edit">✏ Edit</button><button class="btn-action btn-delete">🗑 Hapus</button></td></tr>
+                <tr><td class="td-title">Andi R.</td><td>andi@gmail.com</td><td><span class="td-tag tag-materi">Pelajar</span></td><td>Free Trial</td><td><span class="pill-status pill-draft">Tidak Aktif</span></td><td class="action-btns"><button class="btn-action btn-edit">✏ Edit</button><button class="btn-action btn-delete">🗑 Hapus</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ VIEW: RBAC ═══ -->
+      <div class="admin-view" id="viewRbac">
+        <div class="admin-page-header">
+          <h2>🔐 Role-Based Access Control</h2>
+          <p>Atur hak akses berdasarkan peran pengguna di sistem Mentora.</p>
+        </div>
+        <div class="row g-3">
+          <div class="col-12">
+            <div class="rbac-card" style="border-left-color:#e74c3c;">
+              <span class="rc-icon">👑</span>
+              <div style="flex:1;">
+                <div class="rc-title">Super Admin</div>
+                <div class="rc-desc">Akses penuh ke seluruh sistem, termasuk RBAC itu sendiri.</div>
+                <div class="rc-perms">
+                  <span class="perm-chip">✅ Kelola Materi</span><span class="perm-chip">✅ Kelola Paket</span><span class="perm-chip">✅ Kelola Pengguna</span><span class="perm-chip">✅ RBAC</span><span class="perm-chip">✅ Analitik</span><span class="perm-chip">✅ Assign Materi</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="rbac-card" style="border-left-color:var(--c-dark);">
+              <span class="rc-icon">👨‍🏫</span>
+              <div style="flex:1;">
+                <div class="rc-title">Pengajar / Teacher</div>
+                <div class="rc-desc">Bisa mengelola materi dan melihat data pengguna di kelas mereka.</div>
+                <div class="rc-perms">
+                  <span class="perm-chip">✅ Buat Materi</span><span class="perm-chip">✅ Edit Materi Sendiri</span><span class="perm-chip">✅ Lihat Pengguna Kelas</span><span class="perm-chip denied">❌ Kelola Paket</span><span class="perm-chip denied">❌ RBAC</span><span class="perm-chip denied">❌ Hapus Pengguna</span>
+                </div>
+              </div>
+              <div>
+                <table style="font-size:.75rem;color:var(--c-text);border-collapse:collapse;">
+                  <tr><td style="padding:.3rem .5rem;">Kelola Materi</td><td><button class="toggle-perm on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button></td></tr>
+                  <tr><td style="padding:.3rem .5rem;">Kelola Paket</td><td><button class="toggle-perm off" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button></td></tr>
+                  <tr><td style="padding:.3rem .5rem;">Lihat Analitik</td><td><button class="toggle-perm on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button></td></tr>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="rbac-card" style="border-left-color:var(--c-mid);">
+              <span class="rc-icon">🎓</span>
+              <div style="flex:1;">
+                <div class="rc-title">Pelajar / Student</div>
+                <div class="rc-desc">Hanya bisa mengakses materi yang sesuai paket yang dimiliki.</div>
+                <div class="rc-perms">
+                  <span class="perm-chip">✅ Lihat Materi</span><span class="perm-chip">✅ Ikuti Live Practice</span><span class="perm-chip">✅ Kerjakan Soal</span><span class="perm-chip denied">❌ Admin Panel</span><span class="perm-chip denied">❌ Kelola Materi</span><span class="perm-chip denied">❌ Lihat Data User Lain</span>
+                </div>
+              </div>
+              <div>
+                <table style="font-size:.75rem;color:var(--c-text);border-collapse:collapse;">
+                  <tr><td style="padding:.3rem .5rem;">Akses Materi</td><td><button class="toggle-perm on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button></td></tr>
+                  <tr><td style="padding:.3rem .5rem;">Download Materi</td><td><button class="toggle-perm on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button></td></tr>
+                  <tr><td style="padding:.3rem .5rem;">Live Practice</td><td><button class="toggle-perm off" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button></td></tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ VIEW: ANALYTICS ═══ -->
+      <div class="admin-view" id="viewAnalytics">
+        <div class="admin-page-header"><h2>📊 Analitik</h2><p>Pantau performa platform dan progress pengguna.</p></div>
+        <div class="admin-stat-cards">
+          <div class="asc"><div class="asc-num">1.2K</div><div class="asc-label">Sesi Belajar / Hari</div></div>
+          <div class="asc" style="border-left-color:#27ae60;"><div class="asc-num">78%</div><div class="asc-label">Completion Rate</div></div>
+          <div class="asc" style="border-left-color:var(--c-mid);"><div class="asc-num">4.8⭐</div><div class="asc-label">Rating Rata-rata</div></div>
+          <div class="asc" style="border-left-color:#e67e22;"><div class="asc-num">Rp12M</div><div class="asc-label">Revenue Bulan Ini</div></div>
+        </div>
+        <div class="admin-panel">
+          <div class="admin-panel-header"><h5>Materi Paling Populer</h5></div>
+          <div class="admin-panel-body">
+            <table class="admin-table">
+              <thead><tr><th>Materi</th><th>Penonton</th><th>Completion</th><th>Rating</th></tr></thead>
+              <tbody>
+                <tr><td class="td-title">1.1.1 Learning Orientation</td><td>1,240</td><td>92%</td><td>⭐ 4.9</td></tr>
+                <tr><td class="td-title">Simple vs Compound Sentences</td><td>980</td><td>85%</td><td>⭐ 4.7</td></tr>
+                <tr><td class="td-title">Tenses Overview</td><td>870</td><td>78%</td><td>⭐ 4.6</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ VIEW: TEACHERS ═══ -->
+      <div class="admin-view" id="viewTeachers">
+        <div class="admin-page-header"><h2>👨‍🏫 Kelola Pengajar</h2><p>Daftar pengajar aktif dan sesi live practice mereka.</p></div>
+        <div class="admin-panel">
+          <div class="admin-panel-header"><h5>Daftar Pengajar</h5><button class="btn-add">+ Undang Pengajar</button></div>
+          <div class="admin-panel-body">
+            <table class="admin-table">
+              <thead><tr><th>Nama</th><th>Spesialisasi</th><th>Sesi Aktif</th><th>Rating</th><th>Status</th><th>Aksi</th></tr></thead>
+              <tbody>
+                <tr><td class="td-title">Mr. James</td><td>Bahasa Inggris</td><td>4 sesi/bulan</td><td>⭐ 4.9</td><td><span class="pill-status pill-published">Aktif</span></td><td class="action-btns"><button class="btn-action btn-edit">✏ Edit</button><button class="btn-action btn-delete">🗑 Hapus</button></td></tr>
+                <tr><td class="td-title">Ms. Sarah</td><td>Bahasa Inggris</td><td>4 sesi/bulan</td><td>⭐ 4.8</td><td><span class="pill-status pill-published">Aktif</span></td><td class="action-btns"><button class="btn-action btn-edit">✏ Edit</button><button class="btn-action btn-delete">🗑 Hapus</button></td></tr>
+                <tr><td class="td-title">Dr. Rani</td><td>UTBK — Sains</td><td>2 sesi/bulan</td><td>⭐ 4.7</td><td><span class="pill-status pill-draft">Cuti</span></td><td class="action-btns"><button class="btn-action btn-edit">✏ Edit</button><button class="btn-action btn-delete">🗑 Hapus</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end admin-content -->
+  </div><!-- end admin-body -->
+</div><!-- end admin-wrap -->
+
+<!-- ═══ MODAL: TAMBAH MATERI ═══ -->
+<div class="modal fade" id="modalTambah" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered" style="max-width:500px;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title" id="modalTambahTitle">Tambah Materi Baru</span>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group"><label class="form-label-a">Judul Materi</label><input class="form-ctrl" id="inputJudul" type="text" placeholder="Contoh: 1.1.1 Learning Orientation" /></div>
+        <div class="form-group"><label class="form-label-a">Tipe Konten</label>
+          <select class="form-ctrl" id="inputTipe"><option value="Materi">📚 Materi</option><option value="Video">🎬 Video</option><option value="Latihan">📝 Latihan</option><option value="Live">🎙️ Live Practice</option></select>
+        </div>
+        <div class="form-group"><label class="form-label-a">Paket / Kelas</label>
+          <select class="form-ctrl" id="inputPaket"><option value="Intensif Bahasa Inggris">Intensif Bahasa Inggris</option><option value="Intensif UTBK">Intensif UTBK</option><option value="Paket Lengkap">Paket Lengkap</option><option value="Free Trial">Free Trial</option></select>
+        </div>
+        <div class="form-group"><label class="form-label-a">Modul</label>
+          <select class="form-ctrl" id="inputModul"><option value="Module 1: Introduction">Module 1: Introduction</option><option value="Module 2: Intermediate">Module 2: Intermediate</option><option value="Module 3: Advanced">Module 3: Advanced</option></select>
+        </div>
+        <div class="form-group"><label class="form-label-a">Status</label>
+          <select class="form-ctrl" id="inputStatus"><option value="Draft">Draft</option><option value="Published">Published</option><option value="Archived">Archived</option></select>
+        </div>
+        <div class="form-group"><label class="form-label-a">Deskripsi Singkat</label><textarea class="form-ctrl" rows="2" placeholder="Deskripsi materi..."></textarea></div>
+        <div style="display:flex;gap:.75rem;justify-content:flex-end;margin-top:1rem;">
+          <button class="btn-ghost btn-sm" data-bs-dismiss="modal">Batal</button>
+          <button class="btn-primary btn-sm" onclick="saveMateri()">💾 Simpan Materi</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: ASSIGN ═══ -->
+<div class="modal fade" id="modalAssign" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered" style="max-width:440px;">
+    <div class="modal-content">
+      <div class="modal-header"><span class="modal-title">🔗 Assign Materi ke Paket</span><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+      <div class="modal-body">
+        <div class="form-group"><label class="form-label-a">Pilih Materi</label>
+          <select class="form-ctrl" id="assignMateri"></select>
+        </div>
+        <div class="form-group"><label class="form-label-a">Assign ke Paket</label>
+          <select class="form-ctrl"><option>Intensif Bahasa Inggris</option><option>Intensif UTBK</option><option>Paket Lengkap</option><option>Free Trial</option></select>
+        </div>
+        <div class="form-group"><label class="form-label-a">Urutan di Modul</label><input class="form-ctrl" type="number" value="1" min="1" /></div>
+        <div style="display:flex;gap:.75rem;justify-content:flex-end;margin-top:1rem;">
+          <button class="btn-ghost btn-sm" data-bs-dismiss="modal">Batal</button>
+          <button class="btn-primary btn-sm" onclick="saveAssign()">🔗 Assign</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: PAKET ═══ -->
+<div class="modal fade" id="modalPaket" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered" style="max-width:440px;">
+    <div class="modal-content">
+      <div class="modal-header"><span class="modal-title">📦 Tambah Paket Baru</span><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+      <div class="modal-body">
+        <div class="form-group"><label class="form-label-a">Nama Paket</label><input class="form-ctrl" type="text" placeholder="Nama paket..." /></div>
+        <div class="form-group"><label class="form-label-a">Harga / Bulan</label><input class="form-ctrl" type="text" placeholder="Contoh: Rp200.000" /></div>
+        <div class="form-group"><label class="form-label-a">Deskripsi</label><textarea class="form-ctrl" rows="2" placeholder="Deskripsi paket..."></textarea></div>
+        <div style="display:flex;gap:.75rem;justify-content:flex-end;margin-top:1rem;">
+          <button class="btn-ghost btn-sm" data-bs-dismiss="modal">Batal</button>
+          <button class="btn-primary btn-sm" data-bs-dismiss="modal">💾 Simpan</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // ─── Data store ───
+  let materiData = [
+    { id:1, judul:'1.1.1 Learning Orientation',      tipe:'Materi',  paket:'Intensif Bahasa Inggris', modul:'Module 1: Introduction', status:'Published' },
+    { id:2, judul:'1.1.2 Vocabulary Basics',          tipe:'Video',   paket:'Intensif Bahasa Inggris', modul:'Module 1: Introduction', status:'Published' },
+    { id:3, judul:'1.1.3 Pronunciation Guide',        tipe:'Video',   paket:'Intensif Bahasa Inggris', modul:'Module 1: Introduction', status:'Published' },
+    { id:4, judul:'1.2.1 Descriptive Text',           tipe:'Materi',  paket:'Intensif Bahasa Inggris', modul:'Module 1: Introduction', status:'Published' },
+    { id:5, judul:'1.2.2 Narrative Text',             tipe:'Materi',  paket:'Intensif Bahasa Inggris', modul:'Module 1: Introduction', status:'Draft'     },
+    { id:6, judul:'1.3.1 Tenses Overview',            tipe:'Materi',  paket:'Intensif Bahasa Inggris', modul:'Module 1: Introduction', status:'Published' },
+    { id:7, judul:'1.3.2 Simple vs Compound',         tipe:'Materi',  paket:'Intensif Bahasa Inggris', modul:'Module 1: Introduction', status:'Published' },
+    { id:8, judul:'1.3.3 Verbs Deep Dive',            tipe:'Video',   paket:'Intensif Bahasa Inggris', modul:'Module 1: Introduction', status:'Published' },
+    { id:9, judul:'5.0 Module Test — Introduction',   tipe:'Latihan', paket:'Intensif Bahasa Inggris', modul:'Module 1: Introduction', status:'Published' },
+    { id:10,judul:'6.0 Live Practice — Sentences',    tipe:'Live',    paket:'Intensif Bahasa Inggris', modul:'Module 1: Introduction', status:'Published' },
+    { id:11,judul:'UTBK Tryout — Matematika Set 1',   tipe:'Latihan', paket:'Intensif UTBK',           modul:'Module 2: Intermediate',  status:'Published' },
+    { id:12,judul:'UTBK Tryout — Bahasa Indonesia',   tipe:'Latihan', paket:'Intensif UTBK',           modul:'Module 2: Intermediate',  status:'Archived'  },
+  ];
+
+  let assignData = [
+    { materi:'1.1.1 Learning Orientation', paket:'Intensif Bahasa Inggris', modul:'Module 1: Introduction', urutan:1 },
+    { materi:'1.1.2 Vocabulary Basics',    paket:'Intensif Bahasa Inggris', modul:'Module 1: Introduction', urutan:2 },
+    { materi:'1.3.1 Tenses Overview',      paket:'Paket Lengkap',           modul:'Module 1: Introduction', urutan:1 },
+  ];
+
+  const tipeTag = { 'Materi':'tag-materi', 'Video':'tag-video', 'Latihan':'tag-latihan', 'Live':'tag-live' };
+  const tipeLabel = { 'Materi':'📚 Materi', 'Video':'🎬 Video', 'Latihan':'📝 Latihan', 'Live':'🎙️ Live' };
+  const statusClass = { 'Published':'pill-published', 'Draft':'pill-draft', 'Archived':'pill-archived' };
+
+  function renderMateri(data) {
+    const tbody = document.getElementById('materiBody');
+    tbody.innerHTML = data.map(m => `
+      <tr>
+        <td class="td-title">${m.judul}</td>
+        <td><span class="td-tag ${tipeTag[m.tipe]}">${tipeLabel[m.tipe]}</span></td>
+        <td>${m.paket}</td>
+        <td style="font-size:.78rem;color:var(--c-muted);">${m.modul}</td>
+        <td><span class="pill-status ${statusClass[m.status]}">${m.status}</span></td>
+        <td><div class="action-btns">
+          <button class="btn-action btn-edit" onclick="editMateri(${m.id})">✏ Edit</button>
+          <button class="btn-action btn-assign" onclick="openModalAssignFor('${m.judul}')">🔗 Assign</button>
+          <button class="btn-action btn-delete" onclick="hapusMateri(${m.id})">🗑 Hapus</button>
+        </div></td>
+      </tr>`).join('');
+    document.getElementById('badgeMateri').textContent = data.length;
+  }
+
+  function renderAssign() {
+    document.getElementById('assignBody').innerHTML = assignData.map((a,i) => `
+      <tr>
+        <td class="td-title">${a.materi}</td>
+        <td>${a.paket}</td>
+        <td style="font-size:.78rem;color:var(--c-muted);">${a.modul}</td>
+        <td>#${a.urutan}</td>
+        <td><div class="action-btns"><button class="btn-action btn-delete" onclick="hapusAssign(${i})">🗑 Hapus</button></div></td>
+      </tr>`).join('');
+  }
+
+  function filterMateri() {
+    const q = document.getElementById('searchMateri').value.toLowerCase();
+    const tipe = document.getElementById('filterType').value;
+    const status = document.getElementById('filterStatus').value;
+    const filtered = materiData.filter(m =>
+      m.judul.toLowerCase().includes(q) &&
+      (!tipe || m.tipe === tipe) &&
+      (!status || m.status === status)
+    );
+    renderMateri(filtered);
+  }
+
+  // Edit
+  let editingId = null;
+  function editMateri(id) {
+    editingId = id;
+    const m = materiData.find(x => x.id === id);
+    document.getElementById('modalTambahTitle').textContent = 'Edit Materi';
+    document.getElementById('inputJudul').value = m.judul;
+    document.getElementById('inputTipe').value = m.tipe;
+    document.getElementById('inputPaket').value = m.paket;
+    document.getElementById('inputModul').value = m.modul;
+    document.getElementById('inputStatus').value = m.status;
+    new bootstrap.Modal(document.getElementById('modalTambah')).show();
+  }
+
+  function hapusMateri(id) {
+    if (!confirm('Yakin hapus materi ini?')) return;
+    materiData = materiData.filter(m => m.id !== id);
+    renderMateri(materiData);
+    showToast('Materi berhasil dihapus.');
+  }
+
+  function openModalTambah() {
+    editingId = null;
+    document.getElementById('modalTambahTitle').textContent = 'Tambah Materi Baru';
+    document.getElementById('inputJudul').value = '';
+    document.getElementById('inputStatus').value = 'Draft';
+    new bootstrap.Modal(document.getElementById('modalTambah')).show();
+  }
+
+  function saveMateri() {
+    const judul = document.getElementById('inputJudul').value.trim();
+    if (!judul) { alert('Judul tidak boleh kosong.'); return; }
+    if (editingId) {
+      const m = materiData.find(x => x.id === editingId);
+      m.judul  = judul;
+      m.tipe   = document.getElementById('inputTipe').value;
+      m.paket  = document.getElementById('inputPaket').value;
+      m.modul  = document.getElementById('inputModul').value;
+      m.status = document.getElementById('inputStatus').value;
+    } else {
+      materiData.push({ id: Date.now(), judul, tipe: document.getElementById('inputTipe').value, paket: document.getElementById('inputPaket').value, modul: document.getElementById('inputModul').value, status: document.getElementById('inputStatus').value });
+    }
+    bootstrap.Modal.getInstance(document.getElementById('modalTambah')).hide();
+    renderMateri(materiData);
+    showToast(editingId ? 'Materi diperbarui!' : 'Materi berhasil ditambahkan!');
+  }
+
+  function openModalAssign() {
+    const sel = document.getElementById('assignMateri');
+    sel.innerHTML = materiData.map(m => `<option>${m.judul}</option>`).join('');
+    new bootstrap.Modal(document.getElementById('modalAssign')).show();
+  }
+  function openModalAssignFor(judul) {
+    openModalAssign();
+    document.getElementById('assignMateri').value = judul;
+  }
+  function saveAssign() {
+    const materi = document.getElementById('assignMateri').value;
+    assignData.push({ materi, paket: 'Intensif Bahasa Inggris', modul: 'Module 1: Introduction', urutan: assignData.length + 1 });
+    bootstrap.Modal.getInstance(document.getElementById('modalAssign')).hide();
+    renderAssign();
+    showToast('Materi berhasil di-assign!');
+  }
+  function hapusAssign(i) {
+    if (!confirm('Hapus assignment ini?')) return;
+    assignData.splice(i, 1);
+    renderAssign();
+    showToast('Assignment dihapus.');
+  }
+
+  function openModalPaket() { new bootstrap.Modal(document.getElementById('modalPaket')).show(); }
+  function editPaket(n) { alert('Edit paket: ' + n + '\n(Prototype — modal edit paket)'); }
+  function hapusPaket(n) { if (confirm('Hapus paket ' + n + '?')) showToast('Paket ' + n + ' dihapus.'); }
+
+  // View switcher
+  const viewMap = { materi:'viewMateri', paket:'viewPaket', assign:'viewAssign', users:'viewUsers', teachers:'viewTeachers', rbac:'viewRbac', analytics:'viewAnalytics' };
+  function switchView(key, el) {
+    Object.values(viewMap).forEach(id => { const v = document.getElementById(id); if(v) v.classList.remove('active'); });
+    const target = document.getElementById(viewMap[key]);
+    if (target) target.classList.add('active');
+    document.querySelectorAll('.admin-nav-links a').forEach(a => a.classList.remove('active'));
+    if (el) el.classList.add('active');
+    if (key === 'assign') renderAssign();
+  }
+  function switchViewSide(key, el) {
+    switchView(key, null);
+    document.querySelectorAll('.as-item').forEach(a => a.classList.remove('active'));
+    el.classList.add('active');
+    if (key === 'assign') renderAssign();
+  }
+
+  // Toast
+  function showToast(msg) {
+    const t = document.createElement('div');
+    t.style.cssText = 'position:fixed;bottom:1.5rem;right:1.5rem;background:var(--c-darkest);color:#fff;padding:.75rem 1.2rem;border-radius:12px;font-family:Poppins,sans-serif;font-size:.85rem;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.2);animation:fadeInUp .3s ease;';
+    t.textContent = '✅ ' + msg;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 2500);
+  }
+
+  // Init
+  renderMateri(materiData);
+</script>
+</body>
+</html>
